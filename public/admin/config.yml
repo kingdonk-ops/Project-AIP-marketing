@@ -1,0 +1,61 @@
+# Decap CMS — GitHub backend. Login requires an OAuth provider/proxy (see README).
+backend:
+  name: github
+  repo: kingdonk-ops/Project-AIP-marketing
+  branch: main
+  # base_url: https://your-oauth-proxy.example.com
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "modules"
+    label: "Platform Modules"
+    folder: "src/content/modules"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Tagline", name: "tagline", widget: "string" }
+      - { label: "Category", name: "category", widget: "string" }
+      - { label: "Technical Specs", name: "specs", widget: "list" }
+      - { label: "Safety & Compliance", name: "safetyCompliance", widget: "string", required: false }
+      - { label: "Order", name: "order", widget: "number", value_type: "int", default: 0 }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "industries"
+    label: "Industry Solutions"
+    folder: "src/content/industries"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Standard Code", name: "standardCode", widget: "string" }
+      - { label: "Key Risks", name: "keyRisks", widget: "list" }
+      - { label: "Inspection Types", name: "inspectionTypes", widget: "list" }
+      - { label: "Sample ITP Title", name: "itpSampleTitle", widget: "string" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "legal"
+    label: "Legal & Compliance"
+    folder: "src/content/legal"
+    create: false
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Last Updated", name: "lastUpdated", widget: "string" }
+      - { label: "Jurisdiction", name: "jurisdiction", widget: "string" }
+      - { label: "Version", name: "version", widget: "string" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "whitepapers"
+    label: "Whitepapers"
+    folder: "src/content/whitepapers"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Abstract", name: "abstract", widget: "text" }
+      - { label: "Page Count", name: "pagesCount", widget: "number", value_type: "int" }
+      - { label: "Release Date", name: "releaseDate", widget: "string" }
+      - { label: "Lead Gate Required", name: "leadGateRequired", widget: "boolean", default: true }
+      - { label: "Body", name: "body", widget: "markdown" }

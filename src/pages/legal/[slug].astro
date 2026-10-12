@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('legal');
+  return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<BaseLayout title={`${entry.data.title} | Project AIP`}>
+  <article class="mx-auto max-w-3xl px-6 py-20">
+    <div class="mb-8 border-b border-slate-800 pb-8">
+      <h1 class="text-3xl font-extrabold text-white sm:text-4xl">{entry.data.title}</h1>
+      <dl class="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-xs text-slate-400">
+        <div><dt class="inline font-semibold text-slate-300">Version:</dt> <dd class="inline">{entry.data.version}</dd></div>
+        <div><dt class="inline font-semibold text-slate-300">Last updated:</dt> <dd class="inline">{entry.data.lastUpdated}</dd></div>
+        <div><dt class="inline font-semibold text-slate-300">Jurisdiction:</dt> <dd class="inline">{entry.data.jurisdiction}</dd></div>
+      </dl>
+    </div>
+    <div class="prose prose-invert max-w-none prose-a:text-blue-400">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
