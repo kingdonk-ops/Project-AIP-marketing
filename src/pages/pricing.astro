@@ -1,41 +1,108 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+// Public list prices (AUD). Internal detail lives in the private commercial docs.
 const tiers = [
   {
-    name: 'Pilot',
-    summary: 'A time-boxed trial on a single project or work front.',
-    features: ['One project workspace', 'Configured sample ITPs', 'Offline field capture', 'Onboarding support']
+    name: 'Essentials',
+    audience: 'Solo subcontractors and independent QA/QC technicians.',
+    price: 'AU$75',
+    unit: '/ user / month',
+    note: 'Save 10% with annual billing',
+    cta: 'Discuss Essentials',
+    features: [
+      '1 full user included',
+      '3 reviewer seats (read-only and sign-off)',
+      'Up to 2 active projects',
+      '25 GB pooled file storage',
+      'Standard inspection presets: coating, blasting, welding, civil',
+      'Email, password and two-factor sign-in',
+      'Knowledge base and email support'
+    ]
   },
   {
-    name: 'Project',
-    summary: 'For a live project or maintenance campaign.',
-    features: ['Multiple work packs and disciplines', 'Role-based access control', 'Administrative recovery tools', 'Reporting and record export'],
-    highlight: true
+    name: 'Professional',
+    audience: 'Regional contractors and multi-crew inspection teams.',
+    price: 'AU$600',
+    unit: '/ month',
+    note: 'Includes 5 full users · save 15% annually',
+    cta: 'Discuss Professional',
+    highlight: true,
+    features: [
+      '5 full users included',
+      '20 reviewer seats',
+      'Up to 15 active projects',
+      '250 GB pooled file storage',
+      'Unlimited custom categories and form builder',
+      'REST API (5,000 requests per day)',
+      'In-app dashboards and reporting',
+      'Business-hours email support'
+    ]
   },
   {
     name: 'Enterprise',
-    summary: 'For organisations standardising inspection across sites.',
-    features: ['Multi-project governance', 'Custom ITP libraries', 'Integration options', 'Agreed service levels']
+    audience: 'Asset owners and Tier-1 EPCMs in mining, energy and infrastructure.',
+    price: 'Custom',
+    unit: 'annual contract',
+    note: '20+ users with volume seat pricing',
+    cta: 'Talk to us',
+    features: [
+      'Unlimited reviewer seats and projects',
+      '2 TB+ pooled file storage',
+      'Enterprise taxonomies and cost-code mapping',
+      'SAML / OIDC single sign-on (Microsoft Entra ID)',
+      'Dedicated API gateway and webhooks',
+      'Dedicated deployment option',
+      'Uptime commitment and a named contact'
+    ]
   }
+];
+
+const rows = [
+  { label: 'Included full users', v: ['1', '5', '20+'] },
+  { label: 'Additional full users', v: ['AU$75 / month', 'AU$95 / month', 'Volume pricing'] },
+  { label: 'Included reviewer seats', v: ['3', '20', 'Unlimited'] },
+  { label: 'Additional reviewer seats', v: ['AU$10 / month', 'AU$5 / month', 'Included'] },
+  { label: 'Active projects', v: ['2', '15', 'Unlimited'] },
+  { label: 'Pooled file storage', v: ['25 GB', '250 GB', '2 TB+'] },
+  { label: 'Extra file storage', v: ['AU$0.25 / GB / month', 'AU$0.20 / GB / month', 'By agreement'] },
+  { label: 'Database size', v: ['5 GB', '20 GB', '100 GB'] },
+  { label: 'Inspection categories', v: ['Standard presets', 'Unlimited custom + form builder', 'Enterprise taxonomies'] },
+  { label: 'API access', v: ['—', '5,000 requests / day', 'Dedicated + webhooks'] },
+  { label: 'Reporting', v: ['CSV and Excel export', 'In-app dashboards', 'Dashboards + dedicated options'] },
+  { label: 'Sign-in', v: ['Password + 2FA', 'Password + app MFA', 'SAML / OIDC SSO'] },
+  { label: 'Hosting', v: ['Australia (Sydney)', 'Australia (Sydney)', 'Australia (Sydney), dedicated option'] },
+  { label: 'Support', v: ['Knowledge base, email', 'Business-hours email', 'Uptime commitment, named contact'] }
+];
+
+const addOns = [
+  { name: 'Project expansion pack', price: 'AU$50 / month', desc: '5 more active projects.' },
+  { name: 'Storage booster', price: 'AU$25 / month', desc: '100 GB more pooled file storage.' },
+  { name: 'Reporting feed', price: 'AU$75 / month', desc: 'Read-only feed for your own Power BI or OData tools, using your licences.' },
+  { name: 'White-label client portal', price: 'AU$75 / month', desc: 'Your own domain plus custom PDF headers and footers.' },
+  { name: 'Archive plan', price: 'AU$79 / month or AU$750 / year', desc: 'Read-only auditor access to records after project handover. Coming later.' }
 ];
 ---
 
-<BaseLayout title="Commercial Options | Project AIP">
-  <section class="mx-auto max-w-6xl px-6 py-20">
+<BaseLayout title="Pricing | Project AIP" description="Project AIP plans and pricing in Australian dollars.">
+  <section class="mx-auto max-w-6xl px-6 pb-16 pt-20">
     <div class="mx-auto mb-14 max-w-2xl text-center">
       <span class="text-sm font-semibold text-brand-600">Pricing</span>
-      <h1 class="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">Commercial options</h1>
-      <p class="mt-4 text-lg text-gray-600">Pricing is quoted in AUD and depends on project scope, user count and deployment requirements.</p>
+      <h1 class="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">Plans that grow with your inspection programme</h1>
+      <p class="mt-4 text-lg text-gray-600">All prices in Australian dollars, excluding GST. Reviewer seats let clients and supervisors view and sign off without a full licence.</p>
     </div>
 
     <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
       {tiers.map((tier) => (
         <div class={`relative flex flex-col rounded-2xl p-8 ${tier.highlight ? 'border-2 border-brand-500 shadow-lg' : 'border border-gray-200'}`}>
-          {tier.highlight && <span class="absolute -top-3 left-8 rounded-full bg-brand-500 px-3 py-1 text-xs font-semibold text-white">Most common</span>}
+          {tier.highlight && <span class="absolute -top-3 left-8 rounded-full bg-brand-500 px-3 py-1 text-xs font-semibold text-white">Most popular</span>}
           <h2 class="text-xl font-semibold">{tier.name}</h2>
-          <p class="mt-2 text-sm text-gray-600">{tier.summary}</p>
-          <div class="mt-6 text-3xl font-semibold tracking-tight">On request</div>
+          <p class="mt-2 min-h-[2.5rem] text-sm text-gray-600">{tier.audience}</p>
+          <div class="mt-6 flex items-baseline gap-1.5">
+            <span class="text-4xl font-semibold tracking-tight">{tier.price}</span>
+            <span class="text-sm text-gray-500">{tier.unit}</span>
+          </div>
+          <p class="mt-1 text-xs text-gray-500">{tier.note}</p>
           <ul class="mt-6 flex-1 space-y-2.5">
             {tier.features.map((f) => (
               <li class="flex items-start gap-2 text-sm text-gray-700">
@@ -44,16 +111,54 @@ const tiers = [
               </li>
             ))}
           </ul>
-          <a href="#contact" class={`mt-8 block rounded-full px-5 py-3 text-center text-sm font-semibold text-white transition ${tier.highlight ? 'bg-brand-500 hover:bg-brand-600' : 'bg-ink hover:bg-gray-800'}`}>Discuss {tier.name}</a>
+          <a href="#contact" class={`mt-8 block rounded-full px-5 py-3 text-center text-sm font-semibold text-white transition ${tier.highlight ? 'bg-brand-500 hover:bg-brand-600' : 'bg-ink hover:bg-gray-800'}`}>{tier.cta}</a>
         </div>
       ))}
     </div>
   </section>
 
-  <section id="contact" class="scroll-mt-20 bg-sand py-20">
+  <section class="mx-auto max-w-6xl px-6 pb-20">
+    <h2 class="mb-6 text-2xl font-semibold tracking-tight">Compare plans</h2>
+    <div class="overflow-x-auto rounded-2xl border border-gray-200">
+      <table class="w-full min-w-[640px] text-left text-sm">
+        <thead class="bg-sand">
+          <tr>
+            <th class="px-5 py-3 font-medium text-gray-500"></th>
+            {tiers.map((t) => <th class="px-5 py-3 font-semibold">{t.name}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr class="border-t border-gray-100">
+              <td class="px-5 py-3 font-medium text-gray-700">{r.label}</td>
+              {r.v.map((v) => <td class="px-5 py-3 text-gray-600">{v}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="bg-sand py-20">
+    <div class="mx-auto max-w-6xl px-6">
+      <h2 class="text-2xl font-semibold tracking-tight">Add-ons</h2>
+      <p class="mt-2 text-gray-600">Available on any plan unless noted.</p>
+      <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {addOns.map((a) => (
+          <div class="rounded-2xl bg-white p-6">
+            <h3 class="font-semibold">{a.name}</h3>
+            <div class="mt-1 text-sm font-semibold text-brand-700">{a.price}</div>
+            <p class="mt-2 text-sm text-gray-600">{a.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="scroll-mt-20 py-20">
     <div class="mx-auto max-w-2xl px-6 text-center">
-      <h2 class="text-3xl font-semibold tracking-tight">Discuss a pilot</h2>
-      <p class="mt-4 text-gray-600">Enquiry form coming soon. Contact details will be published here before launch.</p>
+      <h2 class="text-3xl font-semibold tracking-tight">Talk to us about a pilot</h2>
+      <p class="mt-4 text-gray-600">Every customer starts with a sandbox and onboarding support. Enquiry form coming soon — contact details will be published here before launch.</p>
     </div>
   </section>
 </BaseLayout>
