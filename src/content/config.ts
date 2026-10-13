@@ -4,7 +4,10 @@ const modulesCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(), tagline: z.string(), category: z.string(),
-    specs: z.array(z.string()), safetyCompliance: z.string().optional(), order: z.number().default(0)
+    specs: z.array(z.string()), safetyCompliance: z.string().optional(), order: z.number().default(0),
+    // core = phase 0–1, next = phase 2, roadmap = phase 3+ (from docs/blueprint in Project-AIP)
+    status: z.enum(['core', 'next', 'roadmap']).default('core'),
+    featured: z.boolean().default(false)
   })
 });
 const industriesCollection = defineCollection({

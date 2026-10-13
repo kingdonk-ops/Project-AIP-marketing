@@ -13,15 +13,15 @@ const { Content } = await entry.render();
 
 <BaseLayout title={`${entry.data.title} | Project AIP`}>
   <article class="mx-auto max-w-3xl px-6 py-20">
-    <div class="mb-8 border-b border-slate-800 pb-8">
-      <h1 class="text-3xl font-extrabold text-white sm:text-4xl">{entry.data.title}</h1>
-      <dl class="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-xs text-slate-400">
-        <div><dt class="inline font-semibold text-slate-300">Version:</dt> <dd class="inline">{entry.data.version}</dd></div>
-        <div><dt class="inline font-semibold text-slate-300">Last updated:</dt> <dd class="inline">{entry.data.lastUpdated}</dd></div>
-        <div><dt class="inline font-semibold text-slate-300">Jurisdiction:</dt> <dd class="inline">{entry.data.jurisdiction}</dd></div>
+    <div class="border-b border-gray-200 pb-8">
+      <h1 class="text-4xl font-semibold tracking-tight">{entry.data.title}</h1>
+      <dl class="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm text-gray-500">
+        <div><dt class="inline font-medium text-gray-700">Version:</dt> <dd class="inline">{entry.data.version}</dd></div>
+        <div><dt class="inline font-medium text-gray-700">Last updated:</dt> <dd class="inline">{entry.data.lastUpdated}</dd></div>
+        <div><dt class="inline font-medium text-gray-700">Jurisdiction:</dt> <dd class="inline">{entry.data.jurisdiction}</dd></div>
       </dl>
     </div>
-    <div class="prose prose-invert max-w-none prose-a:text-blue-400">
+    <div class="prose prose-gray mt-10 max-w-none prose-headings:font-semibold prose-a:text-brand-700">
       <Content />
     </div>
   </article>

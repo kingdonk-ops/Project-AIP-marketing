@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { statusLabel, statusClass, groupOrder } from '../../lib/modules';
+
+const modules = (await getCollection('modules')).sort((a, b) => a.data.order - b.data.order);
+const groups = [
+  ...groupOrder,
+  ...new Set(modules.map((m) => m.data.category).filter((c) => !groupOrder.includes(c)))
+]
+  .map((name) => ({ name, items: modules.filter((m) => m.data.category === name) }))
+  .filter((g) => g.items.length > 0);
+---
+
+<BaseLayout title="Platform Modules | Project AIP" description="Every module in the Project AIP inspection and QA/QC platform.">
+  <section class="mx-auto max-w-6xl px-6 pb-8 pt-20">
+    <span class="text-sm font-semibold text-brand-600">Platform</span>
+    <h1 class="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">All modules</h1>
+    <p class="mt-4 max-w-2xl text-lg text-gray-600">
+      {modules.length} modules built around one asset tree, one workflow engine and one audit trail.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3 text-sm text-gray-600">
+      <span class="flex items-center gap-2"><span class={`rounded-full px-2.5 py-0.5 text-xs font-medium ${statusClass.core}`}>{statusLabel.core}</span> Foundation of the platform</span>
+      <span class="flex items-center gap-2"><span class={`rounded-full px-2.5 py-0.5 text-xs font-medium ${statusClass.next}`}>{statusLabel.next}</span> Next phase</span>
+      <span class="flex items-center gap-2"><span class={`rounded-full px-2.5 py-0.5 text-xs font-medium ${statusClass.roadmap}`}>{statusLabel.roadmap}</span> Later phases</span>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-6xl px-6 pb-24">
+    {groups.map((g) => (
+      <section class="border-t border-gray-200 py-10">
+        <h2 class="mb-6 text-xl font-semibold">{g.name}</h2>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {g.items.map((m) => (
+            <a href={`/modules/${m.slug}/`} class="group flex flex-col rounded-2xl border border-gray-200 p-5 transition hover:border-brand-500 hover:shadow-md">
+              <div class="flex items-start justify-between gap-3">
+                <h3 class="font-semibold leading-snug group-hover:text-brand-700">{m.data.title}</h3>
+                <span class={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusClass[m.data.status]}`}>{statusLabel[m.data.status]}</span>
+              </div>
+              <p class="mt-2 text-sm leading-relaxed text-gray-600">{m.data.tagline}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

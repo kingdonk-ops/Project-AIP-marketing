@@ -20,6 +20,8 @@ collections:
       - { label: "Category", name: "category", widget: "string" }
       - { label: "Technical Specs", name: "specs", widget: "list" }
       - { label: "Safety & Compliance", name: "safetyCompliance", widget: "string", required: false }
+      - { label: "Status", name: "status", widget: "select", options: ["core", "next", "roadmap"], default: "core" }
+      - { label: "Featured on home page", name: "featured", widget: "boolean", default: false }
       - { label: "Order", name: "order", widget: "number", value_type: "int", default: 0 }
       - { label: "Body", name: "body", widget: "markdown" }
 

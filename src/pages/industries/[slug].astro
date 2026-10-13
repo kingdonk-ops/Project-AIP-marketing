@@ -12,33 +12,34 @@ const { Content } = await entry.render();
 ---
 
 <BaseLayout title={`${entry.data.title} | Project AIP`}>
-  <article class="mx-auto max-w-4xl px-6 py-20">
-    <div class="mb-8 border-b border-slate-800 pb-8">
-      <div class="mb-4 inline-block rounded bg-slate-800 px-2.5 py-1 font-mono text-[11px] text-slate-300">{entry.data.standardCode}</div>
-      <h1 class="text-3xl font-extrabold text-white sm:text-5xl">{entry.data.title}</h1>
-      <p class="mt-4 font-mono text-sm text-slate-400">Sample: {entry.data.itpSampleTitle}</p>
+  <article class="mx-auto max-w-3xl px-6 py-20">
+    <a href="/#industries" class="text-sm font-medium text-gray-500 hover:text-ink">← Industries</a>
+    <div class="mt-6 border-b border-gray-200 pb-10">
+      <div class="inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">{entry.data.standardCode}</div>
+      <h1 class="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">{entry.data.title}</h1>
+      <p class="mt-5 text-sm text-gray-500">Sample plan: <span class="font-medium text-gray-700">{entry.data.itpSampleTitle}</span></p>
     </div>
 
-    <div class="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-      <div class="rounded-lg border border-slate-800 bg-[#0f1420] p-6">
-        <h2 class="mb-4 text-xs font-semibold uppercase tracking-wider text-amber-400">Key risks</h2>
-        <ul class="space-y-2 text-xs text-slate-300">
+    <div class="my-10 grid grid-cols-1 gap-5 md:grid-cols-2">
+      <div class="rounded-2xl border border-gray-200 p-6">
+        <h2 class="mb-4 text-sm font-semibold">Key risks</h2>
+        <ul class="space-y-2.5 text-sm text-gray-700">
           {entry.data.keyRisks.map((r) => (
-            <li class="flex items-start gap-2"><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400"></span>{r}</li>
+            <li class="flex items-start gap-2"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500"></span>{r}</li>
           ))}
         </ul>
       </div>
-      <div class="rounded-lg border border-slate-800 bg-[#0f1420] p-6">
-        <h2 class="mb-4 text-xs font-semibold uppercase tracking-wider text-emerald-400">Inspection types</h2>
-        <ul class="space-y-2 text-xs text-slate-300">
+      <div class="rounded-2xl bg-sand p-6">
+        <h2 class="mb-4 text-sm font-semibold">Inspection types</h2>
+        <ul class="space-y-2.5 text-sm text-gray-700">
           {entry.data.inspectionTypes.map((t) => (
-            <li class="flex items-start gap-2"><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400"></span>{t}</li>
+            <li class="flex items-start gap-2"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500"></span>{t}</li>
           ))}
         </ul>
       </div>
     </div>
 
-    <div class="prose prose-invert max-w-none prose-a:text-blue-400">
+    <div class="prose prose-gray max-w-none prose-headings:font-semibold prose-a:text-brand-700">
       <Content />
     </div>
   </article>
