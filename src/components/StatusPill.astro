@@ -1,0 +1,31 @@
+<a href="/status/" data-status-pill class="inline-flex items-center gap-2 rounded-full border border-gray-700 px-3 py-1.5 text-xs font-medium text-gray-300 transition hover:border-gray-500 hover:text-white">
+  <span class="relative flex h-2 w-2">
+    <span data-status-ping class="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 bg-gray-400"></span>
+    <span data-status-dot class="relative inline-flex h-2 w-2 rounded-full bg-gray-400"></span>
+  </span>
+  <span data-status-text>Checking status…</span>
+</a>
+
+<script>
+  import { fetchStatus, overallText, overallDot } from '../scripts/status';
+
+  const pills = document.querySelectorAll<HTMLElement>('[data-status-pill]');
+  fetchStatus()
+    .then(({ overall }) => {
+      pills.forEach((pill) => {
+        pill.querySelector('[data-status-text]')!.textContent = overallText[overall];
+        for (const sel of ['[data-status-dot]', '[data-status-ping]']) {
+          const el = pill.querySelector(sel)!;
+          el.classList.remove('bg-gray-400');
+          el.classList.add(overallDot[overall]);
+        }
+        if (overall === 'unknown') pill.querySelector('[data-status-ping]')!.remove();
+      });
+    })
+    .catch(() => {
+      pills.forEach((pill) => {
+        pill.querySelector('[data-status-text]')!.textContent = 'View system status';
+        pill.querySelector('[data-status-ping]')!.remove();
+      });
+    });
+</script>

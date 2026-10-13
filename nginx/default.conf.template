@@ -1,0 +1,32 @@
+# Rendered by the nginx image at start-up: ${VARS} are replaced from the environment.
+# STATUS_ORIGIN = Uptime Kuma base URL, e.g. https://status.project-aip.io (set in Coolify).
+server {
+  listen 80;
+  server_name _;
+  absolute_redirect off;
+  root /usr/share/nginx/html;
+  index index.html;
+
+  # Docker's embedded DNS first, public fallback. Resolving at request time means a
+  # missing or down Kuma never stops the site from starting.
+  resolver 127.0.0.11 1.1.1.1 valid=300s ipv6=off;
+  resolver_timeout 5s;
+
+  location / { try_files $uri $uri/ $uri.html =404; }
+  location /admin { try_files $uri $uri/ /admin/index.html; }
+
+  # Same-origin proxy to Uptime Kuma's public status-page API (read-only).
+  location /status-api/ {
+    limit_except GET { deny all; }
+    set $status_origin "${STATUS_ORIGIN}";
+    rewrite ^/status-api/(.*)$ /api/status-page/$1 break;
+    proxy_pass $status_origin;
+    proxy_ssl_server_name on;
+    proxy_set_header Accept "application/json";
+    proxy_hide_header Set-Cookie;
+    proxy_hide_header Access-Control-Allow-Origin;
+    proxy_connect_timeout 5s;
+    proxy_read_timeout 10s;
+    add_header Cache-Control "public, max-age=60" always;
+  }
+}

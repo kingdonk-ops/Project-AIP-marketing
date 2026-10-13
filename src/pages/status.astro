@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { services } from '../data/status';
+---
+
+<BaseLayout title="System Status | Project AIP" description="Live availability of Project AIP services.">
+  <section class="mx-auto max-w-3xl px-6 pb-24 pt-16">
+    <div class="mb-8 flex items-end justify-between gap-4">
+      <div>
+        <span class="text-sm font-semibold text-brand-600">Status</span>
+        <h1 class="mt-1 text-3xl font-semibold tracking-tight sm:text-4xl">System status</h1>
+      </div>
+      <span data-updated class="text-xs text-gray-500"></span>
+    </div>
+
+    <!-- Overall banner -->
+    <div data-banner class="flex items-center gap-3 rounded-2xl bg-gray-100 px-6 py-5">
+      <span data-banner-dot class="h-3 w-3 shrink-0 rounded-full bg-gray-400"></span>
+      <span data-banner-text class="text-lg font-semibold">Checking status…</span>
+    </div>
+
+    <!-- Services -->
+    <div class="mt-8 divide-y divide-gray-100 rounded-2xl border border-gray-200">
+      {services.map((s, i) => (
+        <div class="px-6 py-5" data-service={i}>
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <div class="font-semibold">{s.label}</div>
+              <div class="text-sm text-gray-500">{s.description}</div>
+            </div>
+            <span data-state class="shrink-0 whitespace-nowrap rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-500">—</span>
+          </div>
+          <div data-bars class="mt-3 flex h-8 items-stretch gap-[2px]" aria-hidden="true"></div>
+          <div data-bars-legend class="mt-1.5 hidden justify-between gap-2 text-[11px] text-gray-400">
+            <span data-bars-start></span><span data-uptime class="font-medium text-gray-600"></span><span>Now</span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <p class="mt-6 text-center text-xs text-gray-500">
+      Bars show the most recent automated checks. Monitoring by Uptime Kuma.
+    </p>
+  </section>
+</BaseLayout>
+
+<script>
+  import { fetchStatus, overallText, type ServiceState, type Overall } from '../scripts/status';
+
+  const BARS = 60;
+
+  const stateLabel: Record<ServiceState, string> = {
+    up: 'Operational',
+    degraded: 'Degraded',
+    down: 'Down',
+    maintenance: 'Maintenance',
+    planned: 'Coming soon'
+  };
+  const stateChip: Record<ServiceState, string> = {
+    up: 'bg-brand-50 text-brand-700',
+    degraded: 'bg-amber-50 text-amber-700',
+    down: 'bg-red-50 text-red-700',
+    maintenance: 'bg-blue-50 text-blue-700',
+    planned: 'bg-gray-100 text-gray-500'
+  };
+  const bannerStyle: Record<Overall, { box: string; dot: string }> = {
+    operational: { box: 'bg-brand-50 text-brand-700', dot: 'bg-brand-500' },
+    degraded: { box: 'bg-amber-50 text-amber-800', dot: 'bg-amber-500' },
+    outage: { box: 'bg-red-50 text-red-800', dot: 'bg-red-500' },
+    maintenance: { box: 'bg-blue-50 text-blue-800', dot: 'bg-blue-500' },
+    unknown: { box: 'bg-gray-100 text-gray-700', dot: 'bg-gray-400' }
+  };
+  // Heartbeat status code -> bar colour (0 down, 1 up, 2 pending, 3 maintenance).
+  const barColour = ['bg-red-500', 'bg-brand-500', 'bg-amber-400', 'bg-blue-400'];
+
+  function setBanner(overall: Overall, text = overallText[overall]) {
+    const banner = document.querySelector('[data-banner]')!;
+    banner.className = `flex items-center gap-3 rounded-2xl px-6 py-5 ${bannerStyle[overall].box}`;
+    document.querySelector('[data-banner-dot]')!.className = `h-3 w-3 shrink-0 rounded-full ${bannerStyle[overall].dot}`;
+    document.querySelector('[data-banner-text]')!.textContent = text;
+  }
+
+  function fmtTime(t: string) {
+    // Kuma returns UTC "YYYY-MM-DD HH:mm:ss".
+    const d = new Date(t.replace(' ', 'T') + 'Z');
+    return isNaN(d.getTime()) ? t : d.toLocaleString();
+  }
+
+  fetchStatus()
+    .then(({ overall, services, checkedAt }) => {
+      setBanner(overall);
+      document.querySelector('[data-updated]')!.textContent = `Updated ${checkedAt.toLocaleTimeString()}`;
+
+      services.forEach((s, i) => {
+        const row = document.querySelector(`[data-service="${i}"]`)!;
+        const chip = row.querySelector('[data-state]')!;
+        chip.textContent = stateLabel[s.state];
+        chip.className = `shrink-0 whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium ${stateChip[s.state]}`;
+        if (s.uptime24 !== null) row.querySelector('[data-uptime]')!.textContent = `${(s.uptime24 * 100).toFixed(2)}% uptime (24h)`;
+
+        const bars = row.querySelector('[data-bars]')!;
+        const recent = s.beats.slice(-BARS);
+        const pad = BARS - recent.length;
+        const frag = document.createDocumentFragment();
+        for (let n = 0; n < BARS; n++) {
+          const b = n < pad ? null : recent[n - pad];
+          const el = document.createElement('span');
+          el.className = `flex-1 rounded-sm ${b ? barColour[b.status] ?? 'bg-gray-300' : 'bg-gray-100'}`;
+          if (b) el.title = `${fmtTime(b.time)} — ${['Down', 'Up', 'Pending', 'Maintenance'][b.status] ?? 'Unknown'}${b.ping ? ` · ${b.ping} ms` : ''}`;
+          frag.appendChild(el);
+        }
+        bars.appendChild(frag);
+        if (recent.length) {
+          const legend = row.querySelector('[data-bars-legend]') as HTMLElement;
+          legend.classList.replace('hidden', 'flex');
+          const d = new Date(recent[0].time.replace(' ', 'T') + 'Z');
+          legend.querySelector('[data-bars-start]')!.textContent = isNaN(d.getTime())
+            ? ''
+            : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+      });
+    })
+    .catch(() => setBanner('unknown', 'Status is temporarily unavailable'));
+</script>

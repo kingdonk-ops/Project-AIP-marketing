@@ -1,3 +1,6 @@
+---
+import StatusPill from './StatusPill.astro';
+---
 <footer class="bg-ink py-14 text-sm text-gray-400">
   <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-6 md:grid-cols-4">
     <div>
@@ -22,6 +25,7 @@
       <ul class="space-y-2.5">
         <li><a href="/legal/msa/" class="hover:text-white">Service agreement (draft)</a></li>
         <li><a href="/legal/privacy-policy/" class="hover:text-white">Privacy policy (draft)</a></li>
+        <li><a href="/status/" class="hover:text-white">System status</a></li>
       </ul>
     </div>
     <div>
@@ -29,5 +33,9 @@
       <p>Industrial inspection and QA/QC workflows.</p>
       <p class="mt-2 text-xs text-gray-500">Hosting, security and compliance claims should be confirmed for each deployment.</p>
     </div>
+  </div>
+  <div class="mx-auto mt-10 flex max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-gray-800 px-6 pt-6">
+    <span class="text-xs text-gray-500">© {new Date().getFullYear()} Project AIP</span>
+    <StatusPill />
   </div>
 </footer>

@@ -7,6 +7,10 @@ RUN npm run build
 
 FROM nginx:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
-RUN printf 'server {\n listen 80;\n server_name _;\n absolute_redirect off;\n root /usr/share/nginx/html;\n index index.html;\n location / { try_files $uri $uri/ $uri.html =404; }\n location /admin { try_files $uri $uri/ /admin/index.html; }\n}\n' > /etc/nginx/conf.d/default.conf
+# nginx renders /etc/nginx/templates/*.template into conf.d at start-up.
+COPY nginx/default.conf.template /etc/nginx/templates/default.conf.template
+# Override in Coolify with the Uptime Kuma URL. The default points at a closed local
+# port so the status widgets show "unavailable" instead of breaking start-up.
+ENV STATUS_ORIGIN=http://127.0.0.1:9
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
