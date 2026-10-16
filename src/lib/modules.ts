@@ -12,6 +12,18 @@ export const statusClass: Record<ModuleStatus, string> = {
   roadmap: 'bg-gray-100 text-gray-600'
 };
 
+// Industry vocabulary for module `industryUse` entries.
+export const industries = [
+  'Coating & blasting',
+  'Welding & fabrication',
+  'Insulation & CUI',
+  'Mining & resources',
+  'Oil, gas & LNG',
+  'Power & utilities',
+  'Civil & infrastructure',
+  'Construction & building'
+];
+
 // Display order for module groups on /modules/.
 export const groupOrder = [
   'Inspection & quality',

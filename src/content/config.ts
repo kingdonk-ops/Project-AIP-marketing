@@ -7,7 +7,9 @@ const modulesCollection = defineCollection({
     specs: z.array(z.string()), safetyCompliance: z.string().optional(), order: z.number().default(0),
     // core = phase 0–1, next = phase 2, roadmap = phase 3+ (from docs/blueprint in Project-AIP)
     status: z.enum(['core', 'next', 'roadmap']).default('core'),
-    featured: z.boolean().default(false)
+    featured: z.boolean().default(false),
+    // How the module helps specific industries; `industry` uses the names in src/lib/modules.ts.
+    industryUse: z.array(z.object({ industry: z.string(), text: z.string() })).default([])
   })
 });
 const industriesCollection = defineCollection({
