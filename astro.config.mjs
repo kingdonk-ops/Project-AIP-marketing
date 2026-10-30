@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 
 // Local equivalent of the nginx /status-api/ proxy for `astro dev` (astro preview ignores it).
@@ -16,6 +15,6 @@ const statusProxy = process.env.STATUS_ORIGIN
 
 export default defineConfig({
   output: 'static',
-  integrations: [tailwind(), react()],
+  integrations: [react()],
   vite: { server: { proxy: statusProxy } }
 });
