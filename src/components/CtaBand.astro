@@ -1,0 +1,19 @@
+---
+import { cta } from '../lib/site';
+
+interface Props { title?: string; text?: string }
+const {
+  title = 'See it on your own ITPs',
+  text = 'Book a 15-minute technical demo, or audit the output first: download a specimen ITP sign-off log and daily inspection report.'
+} = Astro.props;
+---
+<section class="px-6 pb-24 print:hidden">
+  <div class="mx-auto max-w-6xl rounded-3xl bg-ink px-8 py-16 text-center text-white">
+    <h2 class="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
+    <p class="mx-auto mt-4 max-w-xl text-gray-400">{text}</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href={cta.demo.href} class="rounded-full bg-brand-500 px-7 py-3.5 font-semibold text-white transition hover:bg-brand-600">{cta.demo.label}</a>
+      <a href={cta.samples.href} class="rounded-full border border-gray-600 px-7 py-3.5 font-semibold text-white transition hover:border-white">{cta.samples.label}</a>
+    </div>
+  </div>
+</section>

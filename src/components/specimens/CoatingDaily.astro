@@ -1,0 +1,85 @@
+---
+import SpecimenSheet from './SpecimenSheet.astro';
+import SpecimenTable from './SpecimenTable.astro';
+
+const meta = [
+  { label: 'Project', value: 'Tank Farm Upgrade' },
+  { label: 'Asset', value: 'Tank T-104 · shell ring 1' },
+  { label: 'ITP', value: 'ITP-COAT-01 Rev C' },
+  { label: 'Shift', value: '14 Oct 2026 · day' },
+  { label: 'Client', value: 'Sample Client Pty Ltd' },
+  { label: 'Specification', value: 'CS-104 System 3 (epoxy)' },
+  { label: 'Inspector', value: 'A. Nguyen' },
+  { label: 'Status', value: 'Approved' }
+];
+const pass = (text: string) => ({ text, tone: 'pass' as const });
+const fail = (text: string) => ({ text, tone: 'fail' as const });
+const photos = [
+  'Ring 1 N after blast, Sa 2½',
+  'Profile replica, 68 µm',
+  'Primer DFT run, ring 1 E'
+];
+---
+<SpecimenSheet title="Surface Preparation & Coating Daily Report" docNo="RPT-COAT-2026-1014-01" meta={meta}>
+  <SpecimenTable
+    caption="Ambient conditions (limit: steel ≥ 3 °C above dew point, RH ≤ 85%)"
+    head={['Time', 'Dry bulb °C', 'Wet bulb °C', 'RH %', 'Dew point °C', 'Steel °C', 'Margin °C', 'Result']}
+    rows={[
+      ['06:30', '14.2', '12.1', '78', '10.4', '12.0', '1.6', fail('Hold: no coating')],
+      ['09:00', '19.5', '15.0', '61', '11.8', '18.6', '6.8', pass('Pass')],
+      ['12:00', '25.1', '17.6', '46', '12.6', '29.4', '16.8', pass('Pass')],
+      ['15:00', '24.0', '17.4', '50', '13.0', '26.1', '13.1', pass('Pass')]
+    ]}
+  />
+  <SpecimenTable
+    caption="Surface preparation"
+    head={['Check', 'Method', 'Requirement', 'Result', 'Instrument', 'Outcome']}
+    rows={[
+      ['Cleanliness', 'ISO 8501-1', 'Sa 2½', 'Sa 2½', 'Visual comparator', pass('Pass')],
+      ['Profile', 'ISO 8503-5 replica tape', '50–85 µm', '68 µm (mean of 3)', 'Micrometer SN 18-2210', pass('Pass')],
+      ['Soluble salts', 'ISO 8502-6 / 8502-9', '≤ 20 mg/m²', '8 mg/m²', 'Conductivity meter SN 20-0981', pass('Pass')],
+      ['Dust', 'ISO 8502-3', 'Rating ≤ 2', 'Rating 1, class 2', 'Tape test', pass('Pass')]
+    ]}
+  />
+  <SpecimenTable
+    caption="Dry film thickness: primer (nominal 100 µm, min 80 µm), batch EP-44817 A/B"
+    head={['Area', 'Spot readings', 'Min µm', 'Max µm', 'Mean µm', 'Gauge', 'Cal. due', 'Outcome']}
+    rows={[
+      ['Ring 1 N', '5', '92', '128', '108', 'DFT gauge SN 21-0457', '03 Mar 2027', pass('Pass')],
+      ['Ring 1 E', '5', '88', '131', '111', 'DFT gauge SN 21-0457', '03 Mar 2027', pass('Pass')],
+      ['Ring 1 S', '5', '95', '140', '115', 'DFT gauge SN 21-0457', '03 Mar 2027', pass('Pass')],
+      ['Ring 1 W', '5', '84', '122', '104', 'DFT gauge SN 21-0457', '03 Mar 2027', pass('Pass')]
+    ]}
+  />
+  <SpecimenTable
+    caption="Materials"
+    head={['Material', 'Product', 'Batch / lot', 'Data sheet', 'Certificate']}
+    rows={[
+      ['Abrasive', 'Garnet 30/60', 'GA-2291', 'TDS-GA-30/60 r4', 'COA-GA-2291'],
+      ['Primer', 'Epoxy zinc phosphate', 'EP-44817 A/B', 'TDS-EP-448 r7', 'COA-EP-44817']
+    ]}
+  />
+  <section>
+    <h3 class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">Photo record</h3>
+    <div class="grid grid-cols-3 gap-3">
+      {photos.map((caption, i) => (
+        <figure>
+          <div class={`aspect-[4/3] rounded ${['bg-gradient-to-br from-gray-400 to-gray-600', 'bg-gradient-to-br from-stone-300 to-stone-500', 'bg-gradient-to-br from-slate-300 to-slate-500'][i]}`}></div>
+          <figcaption class="mt-1 text-[10px] text-gray-500">{`Fig ${i + 1}. ${caption}`}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+  <section class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div class="rounded border border-gray-200 p-3">
+      <div class="text-[10px] uppercase tracking-wide text-gray-400">Inspector</div>
+      <div class="mt-1 font-medium">A. Nguyen · signed 14 Oct 2026 16:42</div>
+      <div class="text-[10px] text-gray-500">Password + MFA · offline capture, synced 16:58</div>
+    </div>
+    <div class="rounded border border-gray-200 p-3">
+      <div class="text-[10px] uppercase tracking-wide text-gray-400">Client representative</div>
+      <div class="mt-1 font-medium">R. Patel · reviewed 15 Oct 2026 07:15</div>
+      <div class="text-[10px] text-gray-500">Reviewer seat · MFA</div>
+    </div>
+  </section>
+</SpecimenSheet>

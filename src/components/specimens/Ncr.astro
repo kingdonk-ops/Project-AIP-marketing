@@ -1,0 +1,72 @@
+---
+import SpecimenSheet from './SpecimenSheet.astro';
+import SpecimenTable from './SpecimenTable.astro';
+
+const meta = [
+  { label: 'Project', value: 'Tank Farm Upgrade' },
+  { label: 'Asset', value: 'Tank T-104 · shell ring 2' },
+  { label: 'Raised from', value: 'INSP-2207 · primer DFT' },
+  { label: 'Severity', value: 'Major' },
+  { label: 'Client', value: 'Sample Client Pty Ltd' },
+  { label: 'ITP line', value: 'ITP-COAT-01 · line 6' },
+  { label: 'Owner', value: 'Example Coatings' },
+  { label: 'Status', value: 'Closed' }
+];
+const timeline = [
+  { when: '15 Oct 2026 10:42', who: 'A. Nguyen (inspector)', what: 'Raised automatically from failed DFT answer on INSP-2207' },
+  { when: '15 Oct 2026 14:10', who: 'L. Brown (contractor QA)', what: 'Disposition proposed: rework' },
+  { when: '16 Oct 2026 08:05', who: 'R. Patel (client)', what: 'Disposition accepted' },
+  { when: '17 Oct 2026 15:30', who: 'Crew 2 supervisor', what: 'Rework completed; corrective actions recorded' },
+  { when: '18 Oct 2026 09:15', who: 'A. Nguyen (inspector)', what: 'Re-inspection INSP-2231 passed' },
+  { when: '18 Oct 2026 11:02', who: 'M. Singh (QA manager)', what: 'NCR closed; hold on ITP line 6 released' }
+];
+---
+<SpecimenSheet title="Non-Conformance Report" docNo="NCR-0142" meta={meta}>
+  <section class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div class="rounded border border-gray-200 p-3">
+      <div class="text-[10px] uppercase tracking-wide text-gray-400">Non-conformance</div>
+      <p class="mt-1">Primer DFT below the 80 µm minimum at 4 of 20 spot locations on ring 2 weld seams (lowest 62 µm). Requirement: CS-104 System 3, primer nominal 100 µm.</p>
+    </div>
+    <div class="rounded border border-gray-200 p-3">
+      <div class="text-[10px] uppercase tracking-wide text-gray-400">Disposition</div>
+      <p class="mt-1"><span class="font-semibold">Rework.</span> Abrade affected areas and apply additional primer within the overcoat window on the data sheet, then re-inspect DFT on the full ring.</p>
+    </div>
+    <div class="rounded border border-gray-200 p-3">
+      <div class="text-[10px] uppercase tracking-wide text-gray-400">Root cause</div>
+      <p class="mt-1">Worn spray tip reduced film build on weld seams; wet film thickness was not checked at seams during application.</p>
+    </div>
+    <div class="rounded border border-gray-200 p-3">
+      <div class="text-[10px] uppercase tracking-wide text-gray-400">Impact</div>
+      <p class="mt-1">Intermediate coat on ring 2 blocked by the ITP line 6 hold point until close-out. Ring 1 unaffected.</p>
+    </div>
+  </section>
+  <SpecimenTable
+    caption="Actions"
+    head={['Type', 'Action', 'Owner', 'Due', 'Status']}
+    rows={[
+      ['Corrective', 'Replace spray tips; verify pump pressure against data sheet', 'Crew 2 supervisor', '16 Oct', { text: 'Done', tone: 'pass' }],
+      ['Corrective', 'Rework affected seams and re-inspect full ring', 'Example Coatings', '18 Oct', { text: 'Done', tone: 'pass' }],
+      ['Preventive', 'Add WFT checkpoint at weld seams to ITP-COAT-01 line 5', 'Contractor QA', '25 Oct', { text: 'Done', tone: 'pass' }]
+    ]}
+  />
+  <SpecimenTable
+    caption="Re-inspection INSP-2231 (DFT gauge SN 21-0457, cal. due 03 Mar 2027)"
+    head={['Location', 'Spot readings', 'Min µm', 'Max µm', 'Mean µm', 'Outcome']}
+    rows={[
+      ['Weld seams', '12', '86', '134', '109', { text: 'Pass', tone: 'pass' }],
+      ['Shell', '8', '94', '138', '116', { text: 'Pass', tone: 'pass' }]
+    ]}
+  />
+  <section>
+    <h3 class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">Lifecycle</h3>
+    <ol class="relative ml-2 border-l border-gray-200">
+      {timeline.map((t, i) => (
+        <li class="mb-2.5 ml-4">
+          <span class={`absolute -left-[5px] mt-1 h-2.5 w-2.5 rounded-full ${i === timeline.length - 1 ? 'bg-brand-500' : 'bg-gray-300'}`}></span>
+          <div class="font-mono text-[10px] text-gray-500">{t.when}</div>
+          <div><span class="font-medium">{t.who}:</span> {t.what}</div>
+        </li>
+      ))}
+    </ol>
+  </section>
+</SpecimenSheet>

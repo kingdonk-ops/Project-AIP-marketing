@@ -1,0 +1,49 @@
+---
+import SpecimenSheet from './SpecimenSheet.astro';
+import SpecimenTable from './SpecimenTable.astro';
+
+const meta = [
+  { label: 'Project', value: 'Tank Farm Upgrade' },
+  { label: 'Asset', value: 'Tank T-104 · shell' },
+  { label: 'ITP', value: 'ITP-COAT-01 Rev C' },
+  { label: 'Template', value: 'Pinned at Rev C' },
+  { label: 'Client', value: 'Sample Client Pty Ltd' },
+  { label: 'Third party', value: 'Example Inspection Services' },
+  { label: 'Lines', value: '8 of 9 complete' },
+  { label: 'Status', value: 'Open: final hold' }
+];
+const done = (text: string) => ({ text, tone: 'pass' as const });
+const hold = (text: string) => ({ text, tone: 'hold' as const });
+const muted = (text: string) => ({ text, tone: 'muted' as const });
+---
+<SpecimenSheet title="ITP Sign-off Log" docNo="ITP-COAT-01-T104-LOG" meta={meta}>
+  <SpecimenTable
+    caption="Point types: H hold · W witness · R review · S surveillance"
+    head={['#', 'Activity', 'Ref.', 'Point', 'Signed by', 'Timestamp', 'Authentication', 'Result']}
+    rows={[
+      ['1', 'Material receipt and batch verification', 'CS-104 §4', 'R', 'S. Kelly (supervisor)', '12 Oct 07:40', 'Password + MFA', done('Accepted')],
+      ['2', 'Pre-blast surface condition', 'ISO 8501-3', 'H', 'A. Nguyen (inspector)', '12 Oct 09:15', 'Password + MFA', done('Released')],
+      ['3', 'Ambient conditions before blast', 'CS-104 §6', 'S', 'Sampled 2 of 6', '12–13 Oct', 'Password + MFA', done('Pass')],
+      ['4', 'Surface cleanliness and profile', 'ISO 8501-1 / 8503', 'H', 'A. Nguyen · R. Patel (client)', '13 Oct 11:20', 'MFA · reviewer seat', done('Released: RTP-0088')],
+      ['5', 'Soluble salt test', 'ISO 8502-6/9', 'W', 'Client notified 12 Oct 16:00', '13 Oct 16:00', 'Automatic', hold('Waived: not attended')],
+      ['6', 'Primer DFT', 'ISO 19840', 'H', 'A. Nguyen (inspector)', '18 Oct 11:02', 'Password + MFA', done('Released after NCR-0142')],
+      ['7', 'Stripe coat inspection', 'CS-104 §8', 'S', 'Sampled 1 of 3', '19 Oct', 'Password + MFA', done('Pass')],
+      ['8', 'Final DFT and holiday test', 'ISO 19840 / CS-104 §9', 'W', 'R. Patel (client), witnessed', '21 Oct 10:30', 'MFA · reviewer seat', done('Pass')],
+      ['9', 'Final inspection and release', 'CS-104 §10', 'H', '—', '—', '—', muted('Pending')]
+    ]}
+  />
+  <section class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+    <div class="rounded border border-gray-200 p-3">
+      <div class="text-[10px] uppercase tracking-wide text-gray-400">Witness notice (line 5)</div>
+      <p class="mt-1">24 h notice sent to client at 12 Oct 16:00. No attendance confirmed; waiver recorded automatically at expiry.</p>
+    </div>
+    <div class="rounded border border-gray-200 p-3">
+      <div class="text-[10px] uppercase tracking-wide text-gray-400">Downstream tasks</div>
+      <p class="mt-1">Handover of T-104 shell blocked by line 9 hold point.</p>
+    </div>
+    <div class="rounded border border-gray-200 p-3">
+      <div class="text-[10px] uppercase tracking-wide text-gray-400">Audit reference</div>
+      <p class="mt-1 font-mono text-[10px]">chain seq 48 213 · 9f3c…a71e</p>
+    </div>
+  </section>
+</SpecimenSheet>

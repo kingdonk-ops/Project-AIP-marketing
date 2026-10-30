@@ -111,7 +111,7 @@ const addOns = [
               </li>
             ))}
           </ul>
-          <a href="#contact" class={`mt-8 block rounded-full px-5 py-3 text-center text-sm font-semibold text-white transition ${tier.highlight ? 'bg-brand-500 hover:bg-brand-600' : 'bg-ink hover:bg-gray-800'}`}>{tier.cta}</a>
+          <a href="/contact/" class={`mt-8 block rounded-full px-5 py-3 text-center text-sm font-semibold text-white transition ${tier.highlight ? 'bg-brand-500 hover:bg-brand-600' : 'bg-ink hover:bg-gray-800'}`}>{tier.cta}</a>
         </div>
       ))}
     </div>
@@ -158,7 +158,11 @@ const addOns = [
   <section id="contact" class="scroll-mt-20 py-20">
     <div class="mx-auto max-w-2xl px-6 text-center">
       <h2 class="text-3xl font-semibold tracking-tight">Talk to us about a pilot</h2>
-      <p class="mt-4 text-gray-600">Every customer starts with a sandbox and onboarding support. Enquiry form coming soon — contact details will be published here before launch.</p>
+      <p class="mt-4 text-gray-600">Every customer starts with a sandbox and onboarding support.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="/contact/" class="rounded-full bg-brand-500 px-7 py-3.5 font-semibold text-white transition hover:bg-brand-600">Book a 15-minute technical demo</a>
+        <a href="/sample-reports/" class="rounded-full border border-gray-300 px-7 py-3.5 font-semibold transition hover:border-ink">See sample reports</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

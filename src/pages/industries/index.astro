@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+const industries = (await getCollection('industries')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Industries | Project AIP" description="ITP execution and QA/QC records for oil and gas, mining, protective coatings, NDT and structural fabrication.">
+  <section class="mx-auto max-w-6xl px-6 pb-20 pt-20">
+    <div class="max-w-2xl">
+      <span class="text-sm font-semibold text-brand-600">Industries</span>
+      <h1 class="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">Built for the specifications you work to</h1>
+      <p class="mt-4 text-lg text-gray-600">Each industry has its own codes, hold points and handover expectations. Project AIP follows your approved ITP, not a generic template.</p>
+    </div>
+    <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+      {industries.map((ind) => (
+        <a href={`/industries/${ind.id}/`} class="group flex flex-col rounded-2xl border border-gray-200 p-8 transition hover:border-brand-500 hover:shadow-lg">
+          <div class="mb-4 inline-block self-start rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">{ind.data.standardCode}</div>
+          <h2 class="text-2xl font-semibold">{ind.data.title}</h2>
+          {ind.data.tagline && <p class="mt-3 text-sm leading-relaxed text-gray-600">{ind.data.tagline}</p>}
+          <div class="mt-5 flex flex-wrap gap-2">
+            {ind.data.inspectionTypes.map((type) => (
+              <span class="rounded-full border border-gray-200 px-3 py-1 text-xs text-gray-700">{type}</span>
+            ))}
+          </div>
+          <span class="mt-auto pt-6 text-sm font-semibold group-hover:text-brand-600">See workflows →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+  <CtaBand />
+</BaseLayout>

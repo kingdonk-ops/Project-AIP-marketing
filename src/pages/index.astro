@@ -1,18 +1,55 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import MetricStrip from '../components/MetricStrip.astro';
+import Check from '../components/Check.astro';
+import CtaBand from '../components/CtaBand.astro';
+import SpecimenDialog from '../components/SpecimenDialog.astro';
+import StatusBadge from '../components/StatusBadge.astro';
 import { getCollection } from 'astro:content';
+import { cta, trustTicks } from '../lib/site';
 
 const allModules = await getCollection('modules');
-const modules = allModules.filter((m) => m.data.featured).sort((a, b) => a.data.order - b.data.order);
-const industries = await getCollection('industries');
+const features = (await getCollection('features')).sort((a, b) => a.data.order - b.data.order);
+const industries = (await getCollection('industries')).sort((a, b) => a.data.order - b.data.order);
+const reports = (await getCollection('sample-reports')).sort((a, b) => a.data.order - b.data.order);
+const testimonials = (await getCollection('testimonials'))
+  .filter((t) => t.data.approved)
+  .sort((a, b) => a.data.order - b.data.order);
 const whitepapers = await getCollection('whitepapers');
 
-const metrics = [
-  { value: 'Offline-first', label: 'Field capture' },
-  { value: 'Provisional', label: 'Until reconciled' },
-  { value: 'Audited', label: 'Recovery actions' },
-  { value: 'AU', label: 'Standards focus' }
+// Status marks keep roadmap capabilities from reading as shipped.
+const oldVsNew = [
+  {
+    old: ['Manual double-entry', ' of DFT and profile readings from paper scrapbooks into Excel.'],
+    aip: ['Instrument-linked readings', ': the gauge serial and its calibration are checked as each reading is recorded. Direct Bluetooth gauge streaming is on the roadmap.'],
+    status: 'core' as const
+  },
+  {
+    old: ['Circumvented hold points', ' resulting in rework, project delays and liquidated damages.'],
+    aip: ['Hard digital gates', ' that block the next task until the client or third-party inspector signs the release.'],
+    status: 'core' as const
+  },
+  {
+    old: ['Late-night report writing', ', assembling photos, calibration certificates and signatures.'],
+    aip: ['Client-ready PDF reports', ' generated on approval from the records already captured on site.'],
+    status: 'next' as const
+  },
+  {
+    old: ['Vulnerable paper trails', ' disputed during audits or warranty claims.'],
+    aip: ['Hash-chained audit logs', ' proving who inspected what, when, and with which instrument.'],
+    status: 'core' as const
+  }
+];
+
+const coatingCallouts = [
+  { title: 'Environmental windows', text: 'Record dry bulb, wet bulb, relative humidity and steel temperature; the dew-point margin is calculated and checked against your client’s substrate limit.' },
+  { title: 'Batch and calibration tracking', text: 'Lock every blast abrasive and coating batch to its technical data sheet, and every reading to the gauge and calibration certificate behind it.' },
+  { title: 'Traceable weld and joint records', text: 'Tie inspection observations, NDT results and repair status to the weld, joint or tank section they belong to.' }
+];
+
+const securityPoints = [
+  { title: 'Append-only, hash-chained audit', text: 'Records, sign-offs and readings are corrected by superseding entries. Nothing is silently edited.' },
+  { title: 'Role-based access', text: 'Clear boundaries between technicians, NDT inspectors, superintendents and external client auditors.' },
+  { title: 'Australian hosting', text: 'Hosted in Sydney, with a dedicated deployment option on Enterprise.' }
 ];
 
 // Illustrative values for the product preview only.
@@ -34,19 +71,26 @@ const stateClass = {
 };
 ---
 
-<BaseLayout title="Project AIP | Industrial QA/QC Inspection Management">
+<BaseLayout
+  title="Project AIP | ITP Execution & QA/QC Records for Heavy Industry"
+  description="Field-first ITP execution for industrial fabricators, coating contractors and NDT teams: hold and witness gates, instrument-linked readings and hash-chained sign-offs."
+>
   <section class="pb-16 pt-20 sm:pt-28">
     <div class="mx-auto max-w-4xl px-6 text-center">
-      <h1 class="text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
-        QA/QC inspection management for heavy industry
+      <span class="inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">For EPCMs, tier-1 contractors, asset owners and inspection providers</span>
+      <h1 class="mt-6 text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
+        Replace clipboard chaos with cryptographic quality control
       </h1>
       <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-600">
-        One system for inspection test plans, hold points and field records — built for coating, welding and plant maintenance teams who work where the network doesn't.
+        Stop losing hours every shift transcribing gauge readings and assembling MDR dossiers by hand. Project AIP is the field-first ITP execution platform built for industrial fabricators, coating contractors and NDT teams.
       </p>
       <div class="mt-10 flex flex-wrap justify-center gap-3">
-        <a href="/pricing/#contact" class="rounded-full bg-brand-500 px-7 py-3.5 text-base font-semibold text-white transition hover:bg-brand-600">Discuss a pilot</a>
-        <a href="#modules" class="rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white transition hover:bg-gray-800">See the platform</a>
+        <a href={cta.demo.href} class="rounded-full bg-brand-500 px-7 py-3.5 text-base font-semibold text-white transition hover:bg-brand-600">{cta.demo.label}</a>
+        <a href={cta.sample.href} data-specimen="itp-signoff-log" class="rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white transition hover:bg-gray-800">{cta.sample.label}</a>
       </div>
+      <ul class="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-600">
+        {trustTicks.map((t) => <li class="flex items-center gap-1.5"><Check />{t}</li>)}
+      </ul>
     </div>
 
     <!-- Illustrative product preview -->
@@ -85,60 +129,173 @@ const stateClass = {
     </div>
   </section>
 
-  <MetricStrip metrics={metrics} />
-
-  <section id="modules" class="mx-auto max-w-6xl scroll-mt-20 px-6 py-24">
-    <div class="mb-12 flex flex-wrap items-end justify-between gap-4">
-      <div class="max-w-2xl">
-        <span class="text-sm font-semibold text-brand-600">Platform</span>
-        <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Built for the realities of field inspection</h2>
-      </div>
-      <a href="/modules/" class="rounded-full border border-gray-300 px-5 py-2.5 text-sm font-semibold transition hover:border-ink">All {allModules.length} modules →</a>
-    </div>
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-      {modules.map((m) => (
-        <a href={`/modules/${m.id}/`} class="group flex flex-col rounded-2xl border border-gray-200 p-7 transition hover:border-brand-500 hover:shadow-lg">
-          <div class="text-xs font-semibold uppercase tracking-wide text-brand-600">{m.data.category}</div>
-          <h3 class="mt-3 text-lg font-semibold leading-snug">{m.data.title}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-gray-600">{m.data.tagline}</p>
-          <ul class="mt-5 space-y-2">
-            {m.data.specs.slice(0, 4).map((spec) => (
-              <li class="flex items-start gap-2 text-sm text-gray-700">
-                <svg class="mt-0.5 h-4 w-4 shrink-0 text-brand-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z" clip-rule="evenodd" /></svg>
-                {spec}
-              </li>
-            ))}
-          </ul>
-          <span class="mt-auto pt-6 text-sm font-semibold text-ink group-hover:text-brand-600">Learn more →</span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <section id="industries" class="scroll-mt-20 bg-sand py-24">
+  <section id="why" class="scroll-mt-20 bg-sand py-24">
     <div class="mx-auto max-w-6xl px-6">
       <div class="mb-12 max-w-2xl">
-        <span class="text-sm font-semibold text-brand-600">Industries</span>
-        <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Built around your inspection plans</h2>
+        <span class="text-sm font-semibold text-brand-600">The problem</span>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Built for the mud, dust and rigour of heavy industry</h2>
+        <p class="mt-4 text-lg text-gray-600">Generic form tools break down when applied to industrial QA/QC specifications. Project AIP bridges the gap between field execution and client compliance.</p>
       </div>
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {industries.map((ind) => (
-          <a href={`/industries/${ind.id}/`} class="block rounded-2xl bg-white p-8 transition hover:shadow-lg">
-            <div class="mb-4 inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">{ind.data.standardCode}</div>
-            <h3 class="mb-4 text-xl font-semibold">{ind.data.title}</h3>
-            <div class="flex flex-wrap gap-2">
-              {ind.data.inspectionTypes.map((type) => (
-                <span class="rounded-full border border-gray-200 px-3 py-1 text-xs text-gray-700">{type}</span>
-              ))}
+      <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+        <div class="hidden grid-cols-2 border-b border-gray-200 text-sm font-semibold md:grid">
+          <div class="px-6 py-4 text-gray-500">The old way</div>
+          <div class="border-l border-gray-200 px-6 py-4 text-brand-700">The Project AIP way</div>
+        </div>
+        {oldVsNew.map((row) => (
+          <div class="grid grid-cols-1 border-b border-gray-100 last:border-b-0 md:grid-cols-2">
+            <div class="px-6 py-5 text-gray-600">
+              <span class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-400 md:hidden">The old way</span>
+              <strong class="text-ink">{row.old[0]}</strong>{row.old[1]}
             </div>
-          </a>
+            <div class="bg-brand-50/40 px-6 py-5 text-gray-700 md:border-l md:border-gray-200">
+              <span class="mb-1 block text-xs font-semibold uppercase tracking-wide text-brand-700 md:hidden">The Project AIP way</span>
+              <strong class="text-ink">{row.aip[0]}</strong>{row.aip[1]}
+              {row.status !== 'core' && <span class="ml-2 align-middle"><StatusBadge status={row.status} /></span>}
+            </div>
+          </div>
         ))}
       </div>
     </div>
   </section>
 
+  <section id="features" class="mx-auto max-w-6xl scroll-mt-20 px-6 py-24">
+    <div class="mb-12 flex flex-wrap items-end justify-between gap-4">
+      <div class="max-w-2xl">
+        <span class="text-sm font-semibold text-brand-600">Platform</span>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">ITP integrity, not digital checklists</h2>
+        <p class="mt-4 text-lg text-gray-600">Hold points, witness points, instrument traceability and MDR compilation, in one record per asset.</p>
+      </div>
+      <a href="/modules/" class="rounded-full border border-gray-300 px-5 py-2.5 text-sm font-semibold transition hover:border-ink">All {allModules.length} modules →</a>
+    </div>
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+      {features.map((f) => (
+        <a href={`/features/${f.id}/`} class="group flex flex-col rounded-2xl border border-gray-200 p-7 transition hover:border-brand-500 hover:shadow-lg">
+          <div class="text-xs font-semibold uppercase tracking-wide text-brand-600">{f.data.badge}</div>
+          <h3 class="mt-3 text-xl font-semibold leading-snug">{f.data.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-gray-600">{f.data.summary}</p>
+          <ul class="mt-5 space-y-2.5">
+            {f.data.pillars.map((p) => (
+              <li class="flex items-start justify-between gap-3 text-sm text-gray-700">
+                <span class="flex items-start gap-2"><Check />{p.title}</span>
+                {p.status !== 'core' && <StatusBadge status={p.status} />}
+              </li>
+            ))}
+          </ul>
+          <span class="mt-auto pt-6 text-sm font-semibold text-ink group-hover:text-brand-600">Explore {f.data.title.toLowerCase()} →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="bg-ink py-24 text-white">
+    <div class="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 lg:grid-cols-[1fr_1.2fr]">
+      <div>
+        <span class="text-sm font-semibold text-brand-500">Protective coatings & NDT</span>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Designed around AS/NZS, ISO and AMPP workflows</h2>
+        <p class="mt-4 text-lg text-gray-400">Whether you are running surface preparation inspections in a Pilbara shut or verifying high-build epoxy on an offshore LNG module, Project AIP follows your standard operating procedure.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/industries/protective-coatings-ndt/" class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-600">Coatings & NDT workflows</a>
+          <a href="/sample-reports/coating-daily-report/" data-specimen="coating-daily-report" class="rounded-full border border-gray-600 px-6 py-3 text-sm font-semibold text-white transition hover:border-white">Preview a daily coating report</a>
+        </div>
+      </div>
+      <div class="space-y-4">
+        {coatingCallouts.map((c) => (
+          <div class="rounded-2xl border border-gray-800 bg-white/5 p-6">
+            <h3 class="font-semibold">{c.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-gray-400">{c.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="industries" class="mx-auto max-w-6xl scroll-mt-20 px-6 py-24">
+    <div class="mb-12 flex flex-wrap items-end justify-between gap-4">
+      <div class="max-w-2xl">
+        <span class="text-sm font-semibold text-brand-600">Industries</span>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Built around your inspection plans</h2>
+      </div>
+      <a href="/industries/" class="rounded-full border border-gray-300 px-5 py-2.5 text-sm font-semibold transition hover:border-ink">All industries →</a>
+    </div>
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+      {industries.map((ind) => (
+        <a href={`/industries/${ind.id}/`} class="block rounded-2xl border border-gray-200 p-8 transition hover:border-brand-500 hover:shadow-lg">
+          <div class="mb-4 inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">{ind.data.standardCode}</div>
+          <h3 class="text-xl font-semibold">{ind.data.title}</h3>
+          {ind.data.tagline && <p class="mt-2 text-sm leading-relaxed text-gray-600">{ind.data.tagline}</p>}
+          <div class="mt-5 flex flex-wrap gap-2">
+            {ind.data.inspectionTypes.slice(0, 4).map((type) => (
+              <span class="rounded-full border border-gray-200 px-3 py-1 text-xs text-gray-700">{type}</span>
+            ))}
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section id="sample-reports" class="scroll-mt-20 bg-sand py-24">
+    <div class="mx-auto max-w-6xl px-6">
+      <div class="mb-12 flex flex-wrap items-end justify-between gap-4">
+        <div class="max-w-2xl">
+          <span class="text-sm font-semibold text-brand-600">Sample reports</span>
+          <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Audit the output before you talk to sales</h2>
+          <p class="mt-4 text-lg text-gray-600">Specimen deliverables generated from inspection records: the format your client receives.</p>
+        </div>
+        <a href="/sample-reports/" class="rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold transition hover:border-ink">All sample reports →</a>
+      </div>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {reports.map((r) => (
+          <div class="flex flex-col rounded-2xl bg-white p-7">
+            <h3 class="text-lg font-semibold leading-snug">{r.data.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-gray-600">{r.data.summary}</p>
+            <div class="mt-auto flex flex-wrap gap-2 pt-6">
+              <a href={`/sample-reports/${r.id}/`} data-specimen={r.id} class="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800">Preview</a>
+              <a href={r.data.downloadUrl ?? `/sample-reports/${r.id}/`} class="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold transition hover:border-ink">{r.data.downloadUrl ? 'Download PDF' : 'Open & print'}</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 py-24">
+    <div class="mb-12 flex flex-wrap items-end justify-between gap-4">
+      <div class="max-w-2xl">
+        <span class="text-sm font-semibold text-brand-600">Security & data</span>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Records that stand up in an audit or a dispute</h2>
+      </div>
+      <a href="/security-and-data/" class="rounded-full border border-gray-300 px-5 py-2.5 text-sm font-semibold transition hover:border-ink">How we protect your records →</a>
+    </div>
+    <div>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        {securityPoints.map((s) => (
+          <div class="rounded-2xl border border-gray-200 p-6">
+            <h3 class="font-semibold">{s.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-gray-600">{s.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {testimonials.length > 0 && (
+    <section class="bg-sand py-24">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class="mb-12 text-3xl font-semibold tracking-tight sm:text-4xl">From the field</h2>
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {testimonials.map((t) => (
+            <figure class="rounded-2xl bg-white p-8">
+              <blockquote class="text-lg leading-relaxed">“{t.data.quote}”</blockquote>
+              <figcaption class="mt-5 text-sm text-gray-600"><span class="font-semibold text-ink">{t.data.name}</span>, {t.data.role}, {t.data.company}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   {whitepapers.length > 0 && (
-    <section id="resources" class="mx-auto max-w-6xl px-6 py-24">
+    <section id="resources" class="mx-auto max-w-6xl px-6 pb-24">
       <div class="mb-12 max-w-2xl">
         <span class="text-sm font-semibold text-brand-600">Resources</span>
         <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Technical papers</h2>
@@ -154,11 +311,7 @@ const stateClass = {
     </section>
   )}
 
-  <section class="px-6 pb-24">
-    <div class="mx-auto max-w-6xl rounded-3xl bg-ink px-8 py-16 text-center text-white">
-      <h2 class="text-3xl font-semibold tracking-tight sm:text-4xl">Ready to run a pilot?</h2>
-      <p class="mx-auto mt-4 max-w-xl text-gray-400">Start with one project and your own ITPs, and see how offline field capture fits your QA process.</p>
-      <a href="/pricing/#contact" class="mt-8 inline-block rounded-full bg-brand-500 px-7 py-3.5 font-semibold text-white transition hover:bg-brand-600">Discuss a pilot</a>
-    </div>
-  </section>
+  <CtaBand />
+
+  {reports.map((r) => <SpecimenDialog report={r} />)}
 </BaseLayout>

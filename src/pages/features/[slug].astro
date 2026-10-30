@@ -1,0 +1,87 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Check from '../../components/Check.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import MetricStrip from '../../components/MetricStrip.astro';
+import SpecimenDialog from '../../components/SpecimenDialog.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import { cta } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('features');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const report = entry.data.sampleReport ? await getEntry('sample-reports', entry.data.sampleReport) : undefined;
+const related = (await Promise.all(entry.data.relatedModules.map((id) => getEntry('modules', id)))).filter((m) => m !== undefined);
+const sampleHref = entry.data.sampleDownloadUrl ?? (report ? `/sample-reports/${report.id}/` : cta.samples.href);
+---
+
+<BaseLayout title={`${entry.data.title} | Project AIP`} description={entry.data.summary}>
+  <section class="mx-auto max-w-4xl px-6 pb-16 pt-20 text-center">
+    <a href="/features/" class="block text-sm font-medium text-gray-500 hover:text-ink">← All features</a>
+    <div class="mt-6 inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">{entry.data.badge}</div>
+    <h1 class="mt-5 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">{entry.data.headline}</h1>
+    <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-600">{entry.data.summary}</p>
+    {entry.data.targetStandard && <p class="mt-4 text-sm text-gray-500">Built around: <span class="font-medium text-gray-700">{entry.data.targetStandard}</span></p>}
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
+      <a href={cta.demo.href} class="rounded-full bg-brand-500 px-7 py-3.5 font-semibold text-white transition hover:bg-brand-600">{cta.demo.label}</a>
+      <a href={sampleHref} data-specimen={entry.data.sampleDownloadUrl ? undefined : report?.id} class="rounded-full bg-ink px-7 py-3.5 font-semibold text-white transition hover:bg-gray-800">
+        {report ? `Sample: ${report.data.title}` : cta.samples.label}
+      </a>
+    </div>
+  </section>
+
+  {entry.data.heroMetrics.length > 0 && <MetricStrip metrics={entry.data.heroMetrics} />}
+
+  <section class="mx-auto max-w-6xl px-6 py-24">
+    <div class="space-y-6">
+      {entry.data.pillars.map((p, i) => (
+        <div class="grid grid-cols-1 gap-8 rounded-2xl border border-gray-200 p-8 lg:grid-cols-[1.1fr_1fr]">
+          <div>
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="font-mono text-xs text-gray-400">{String(i + 1).padStart(2, '0')}</span>
+              <StatusBadge status={p.status} />
+            </div>
+            <h2 class="mt-3 text-2xl font-semibold tracking-tight">{p.title}</h2>
+            <p class="mt-3 leading-relaxed text-gray-600">{p.text}</p>
+          </div>
+          {p.points.length > 0 && (
+            <ul class="space-y-3 rounded-xl bg-sand p-6">
+              {p.points.map((pt) => <li class="flex items-start gap-2 text-sm text-gray-700"><Check />{pt}</li>)}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <div class="prose prose-gray mx-auto mt-16 max-w-3xl prose-headings:font-semibold prose-a:text-brand-700">
+      <Content />
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="bg-sand py-20">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class="text-2xl font-semibold tracking-tight">Modules behind this feature</h2>
+        <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {related.map((m) => (
+            <a href={`/modules/${m.id}/`} class="flex flex-col rounded-2xl bg-white p-6 transition hover:shadow-lg">
+              <div class="flex items-start justify-between gap-3">
+                <h3 class="font-semibold">{m.data.title}</h3>
+                <StatusBadge status={m.data.status} />
+              </div>
+              <p class="mt-2 text-sm leading-relaxed text-gray-600">{m.data.tagline}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <div class="pt-24"><CtaBand title={`See ${entry.data.title.toLowerCase()} on your own ITPs`} /></div>
+  {report && <SpecimenDialog report={report} />}
+</BaseLayout>
