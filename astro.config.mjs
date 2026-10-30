@@ -15,6 +15,8 @@ const statusProxy = process.env.STATUS_ORIGIN
 
 export default defineConfig({
   output: 'static',
+  // Old URLs kept working after the industry pages were reorganised.
+  redirects: { '/industries/coating-blasting': '/industries/protective-coatings-ndt' },
   integrations: [react()],
   vite: { server: { proxy: statusProxy } }
 });

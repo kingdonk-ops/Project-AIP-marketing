@@ -32,11 +32,92 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
+      - { label: "Tagline", name: "tagline", widget: "string", required: false }
       - { label: "Standard Code", name: "standardCode", widget: "string" }
+      - { label: "Order", name: "order", widget: "number", value_type: "int", default: 0 }
+      - label: "Hero metrics"
+        name: "heroMetrics"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Value", name: "value", widget: "string" }
+          - { label: "Label", name: "label", widget: "string" }
+      - label: "Workflows"
+        name: "workflows"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Text", name: "text", widget: "text" }
       - { label: "Key Risks", name: "keyRisks", widget: "list" }
       - { label: "Inspection Types", name: "inspectionTypes", widget: "list" }
       - { label: "Sample ITP Title", name: "itpSampleTitle", widget: "string" }
+      - { label: "Related modules (slugs)", name: "relatedModules", widget: "list", required: false }
+      - { label: "Sample report", name: "sampleReport", widget: "relation", collection: "sample_reports", value_field: "{{slug}}", search_fields: ["title"], display_fields: ["title"], required: false }
       - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "features"
+    label: "Feature Pages"
+    folder: "src/content/features"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Badge", name: "badge", widget: "string" }
+      - { label: "Headline", name: "headline", widget: "string" }
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Target standard", name: "targetStandard", widget: "string", required: false }
+      - { label: "Order", name: "order", widget: "number", value_type: "int", default: 0 }
+      - label: "Hero metrics"
+        name: "heroMetrics"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Value", name: "value", widget: "string" }
+          - { label: "Label", name: "label", widget: "string" }
+      - label: "Pillars"
+        name: "pillars"
+        widget: "list"
+        hint: "Set each pillar's status honestly: only core items are part of the platform foundation."
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Text", name: "text", widget: "text" }
+          - { label: "Points", name: "points", widget: "list", required: false }
+          - { label: "Status", name: "status", widget: "select", options: ["core", "next", "roadmap"], default: "core" }
+      - { label: "Related modules (slugs)", name: "relatedModules", widget: "list", required: false }
+      - { label: "Sample report", name: "sampleReport", widget: "relation", collection: "sample_reports", value_field: "{{slug}}", search_fields: ["title"], display_fields: ["title"], required: false }
+      - { label: "Sample download (overrides the report preview)", name: "sampleDownloadUrl", widget: "file", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "sample_reports"
+    label: "Sample Reports"
+    folder: "src/content/sample-reports"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Specimen layout", name: "kind", widget: "select", options: ["coating-daily", "ncr", "itp-log"] }
+      - { label: "Audience", name: "audience", widget: "string" }
+      - { label: "Includes", name: "includes", widget: "list" }
+      - { label: "Order", name: "order", widget: "number", value_type: "int", default: 0 }
+      - { label: "Downloadable PDF", name: "downloadUrl", widget: "file", required: false, hint: "Upload a real sample PDF. Without one, visitors can print the specimen page to PDF." }
+      - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "testimonials"
+    label: "Customer Testimonials"
+    folder: "src/content/testimonials"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Quote", name: "quote", widget: "text" }
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Role", name: "role", widget: "string" }
+      - { label: "Company", name: "company", widget: "string" }
+      - { label: "Industry", name: "industry", widget: "string", required: false }
+      - { label: "Approved for publication", name: "approved", widget: "boolean", default: false, hint: "Only publish once the customer has signed off the wording." }
+      - { label: "Order", name: "order", widget: "number", value_type: "int", default: 0 }
+      - { label: "Body", name: "body", widget: "markdown", required: false }
 
   - name: "legal"
     label: "Legal & Compliance"

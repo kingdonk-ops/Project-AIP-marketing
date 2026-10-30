@@ -3,6 +3,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+# Form handler for /contact/. Without it the page shows a "coming soon" notice.
+ARG PUBLIC_CONTACT_ENDPOINT=
+ENV PUBLIC_CONTACT_ENDPOINT=$PUBLIC_CONTACT_ENDPOINT
 RUN npm run build
 
 FROM nginx:alpine

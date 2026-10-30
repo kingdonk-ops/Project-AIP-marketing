@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Check from '../components/Check.astro';
+import CtaBand from '../components/CtaBand.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import StatusLegend from '../components/StatusLegend.astro';
+import type { ModuleStatus } from '../lib/modules';
+
+const pillars: { title: string; text: string; status: ModuleStatus; points: string[]; module: string }[] = [
+  {
+    title: 'Cryptographic, append-only audit trail',
+    status: 'core',
+    module: 'audit',
+    text: 'QA records, inspection sign-offs and gauge readings cannot be edited after the fact without leaving a trace. Every change is written to an append-only log in which each entry carries the hash of the one before it, so altering history breaks the chain.',
+    points: [
+      'Database-level REVOKE on update and delete; the application cannot rewrite the log',
+      'Each entry hash-chained to the previous one and periodically anchored to write-once (S3 Object Lock) storage',
+      'Corrections recorded as superseding entries with a reason for change, never silent edits',
+      'Gate overrides and expiry bypasses flagged so auditors can sample exceptions first',
+      'Separate, equally hash-chained security stream for sign-ins, permission changes and exports'
+    ]
+  },
+  {
+    title: 'Role-based access control',
+    status: 'core',
+    module: 'access',
+    text: 'Field technicians, NDT inspectors, superintendents and external client auditors each see and do only what their role allows, across every module, scoped down to the project, team, discipline and asset.',
+    points: [
+      'One permission model across every module',
+      'Qualified sign-off: only staff with a current qualification can sign that inspection type',
+      'Team visibility scoped to asset subtrees',
+      'Field masking for clients and subcontractors, so commercial data stays private',
+      'Audit read permission separate from tenant admin'
+    ]
+  },
+  {
+    title: 'Identity and sign-in',
+    status: 'core',
+    module: 'identity',
+    text: 'The right sign-in for each kind of user, from enterprise single sign-on for office staff to simple, individual sign-off on shared site devices.',
+    points: [
+      'SAML and OIDC single sign-on (Microsoft Entra ID) on Enterprise',
+      'SCIM provisioning; deprovisioning revokes sessions and access in one step',
+      'Multi-factor authentication for privileged roles',
+      'Magic link or PIN for field users, with shared-device mode and individual sign-off'
+    ]
+  },
+  {
+    title: 'Sealed, verifiable records',
+    status: 'next',
+    module: 'signing',
+    text: 'Signatures bind the signer, their qualification and a fingerprint of the document together. Published PDFs are sealed, and any later change voids the seal.',
+    points: [
+      'Step-up authentication for hold point releases',
+      'Offline sign-off with deferred sealing',
+      'Handover submissions frozen as snapshots with a hash manifest',
+      'Signed export manifest so the audit chain can be verified without trusting the platform'
+    ]
+  }
+];
+
+const hosting = [
+  { label: 'Hosting region', value: 'Australia (Sydney)' },
+  { label: 'Dedicated deployment', value: 'Enterprise option' },
+  { label: 'Tenant isolation', value: 'Row-level security per tenant' },
+  { label: 'Data export', value: 'Your records, exportable at any time' }
+];
+---
+
+<BaseLayout title="Security & Data | Project AIP" description="Hash-chained audit trail, role-based access control and Australian hosting for industrial QA/QC records.">
+  <section class="mx-auto max-w-4xl px-6 pb-16 pt-20 text-center">
+    <span class="text-sm font-semibold text-brand-600">Security & data</span>
+    <h1 class="mt-2 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">QA records that hold up in an audit, a claim or a dispute</h1>
+    <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-600">Inspection evidence is only worth something if nobody can quietly change it. Project AIP is built so that who inspected what, when, and with which instrument can be proven, not just asserted.</p>
+  </section>
+
+  <section class="bg-sand py-12">
+    <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-6 text-center md:grid-cols-4">
+      {hosting.map((h) => (
+        <div>
+          <div class="text-lg font-semibold tracking-tight">{h.value}</div>
+          <div class="mt-1 text-sm text-gray-600">{h.label}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 py-24">
+    <StatusLegend />
+    <div class="mt-10 space-y-6">
+      {pillars.map((p) => (
+        <div class="grid grid-cols-1 gap-8 rounded-2xl border border-gray-200 p-8 lg:grid-cols-[1.1fr_1fr]">
+          <div>
+            <StatusBadge status={p.status} />
+            <h2 class="mt-3 text-2xl font-semibold tracking-tight">{p.title}</h2>
+            <p class="mt-3 leading-relaxed text-gray-600">{p.text}</p>
+            <a href={`/modules/${p.module}/`} class="mt-5 inline-block text-sm font-semibold hover:text-brand-600">Module details →</a>
+          </div>
+          <ul class="space-y-3 rounded-xl bg-sand p-6">
+            {p.points.map((pt) => <li class="flex items-start gap-2 text-sm text-gray-700"><Check />{pt}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="mx-auto mt-12 max-w-3xl text-center text-sm text-gray-500">Hosting, security and compliance arrangements are confirmed for each deployment during onboarding. Ask us for the current security pack as part of your evaluation.</p>
+  </section>
+
+  <CtaBand title="Put our audit trail through your audit" text="Book a technical demo with your QA and IT leads, and we'll walk through the audit chain, access model and hosting for your deployment." />
+</BaseLayout>

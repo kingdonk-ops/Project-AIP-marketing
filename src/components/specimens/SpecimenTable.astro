@@ -1,0 +1,35 @@
+---
+interface Props {
+  caption: string;
+  head: string[];
+  rows: (string | { text: string; tone?: 'pass' | 'fail' | 'hold' | 'muted' })[][];
+}
+const { caption, head, rows } = Astro.props;
+const tone = {
+  pass: 'font-semibold text-brand-700',
+  fail: 'font-semibold text-red-700',
+  hold: 'font-semibold text-amber-700',
+  muted: 'text-gray-400'
+};
+---
+<section>
+  <h3 class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">{caption}</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[520px] border-collapse text-left">
+      <thead>
+        <tr class="bg-sand">
+          {head.map((h) => <th class="border border-gray-200 px-2 py-1.5 font-medium text-gray-600">{h}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr>
+            {row.map((cell) => typeof cell === 'string'
+              ? <td class="border border-gray-200 px-2 py-1.5">{cell}</td>
+              : <td class={`border border-gray-200 px-2 py-1.5 ${cell.tone ? tone[cell.tone] : ''}`}>{cell.text}</td>)}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>

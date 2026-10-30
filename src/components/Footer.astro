@@ -1,23 +1,34 @@
 ---
 import StatusPill from './StatusPill.astro';
 ---
-<footer class="bg-ink py-14 text-sm text-gray-400">
-  <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-6 md:grid-cols-4">
+<footer class="bg-ink py-14 text-sm text-gray-400 print:hidden">
+  <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-6 md:grid-cols-5">
     <div>
-      <h2 class="mb-4 font-semibold text-white">Platform</h2>
+      <h2 class="mb-4 font-semibold text-white">Features</h2>
       <ul class="space-y-2.5">
-        <li><a href="/modules/inspections/" class="hover:text-white">Inspections & ITPs</a></li>
-        <li><a href="/modules/traceability/" class="hover:text-white">Traceability</a></li>
-        <li><a href="/modules/offline/" class="hover:text-white">Offline field app</a></li>
+        <li><a href="/features/itp-management/" class="hover:text-white">ITP management</a></li>
+        <li><a href="/features/field-reporting/" class="hover:text-white">Field reporting</a></li>
+        <li><a href="/features/hardware-sync/" class="hover:text-white">Hardware & gauge sync</a></li>
+        <li><a href="/features/task-management/" class="hover:text-white">Task management</a></li>
         <li><a href="/modules/" class="hover:text-white">All modules</a></li>
-        <li><a href="/pricing/" class="hover:text-white">Pricing</a></li>
       </ul>
     </div>
     <div>
       <h2 class="mb-4 font-semibold text-white">Industries</h2>
       <ul class="space-y-2.5">
-        <li><a href="/industries/coating-blasting/" class="hover:text-white">Coating & blasting</a></li>
+        <li><a href="/industries/oil-and-gas/" class="hover:text-white">Oil, gas & LNG</a></li>
+        <li><a href="/industries/mining-and-resources/" class="hover:text-white">Mining & resources</a></li>
+        <li><a href="/industries/protective-coatings-ndt/" class="hover:text-white">Protective coatings & NDT</a></li>
         <li><a href="/industries/structural-welding/" class="hover:text-white">Structural welding</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="mb-4 font-semibold text-white">Evaluate</h2>
+      <ul class="space-y-2.5">
+        <li><a href="/sample-reports/" class="hover:text-white">Sample reports</a></li>
+        <li><a href="/security-and-data/" class="hover:text-white">Security & data</a></li>
+        <li><a href="/pricing/" class="hover:text-white">Pricing</a></li>
+        <li><a href="/contact/" class="hover:text-white">Book a demo</a></li>
       </ul>
     </div>
     <div>
@@ -28,9 +39,9 @@ import StatusPill from './StatusPill.astro';
         <li><a href="/status/" class="hover:text-white">System status</a></li>
       </ul>
     </div>
-    <div>
+    <div class="col-span-2 md:col-span-1">
       <h2 class="mb-4 font-semibold text-white">Project AIP</h2>
-      <p>Industrial inspection and QA/QC workflows.</p>
+      <p>Field-first ITP execution and QA/QC records for heavy industry.</p>
       <p class="mt-2 text-xs text-gray-500">Hosting, security and compliance claims should be confirmed for each deployment.</p>
     </div>
   </div>

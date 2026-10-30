@@ -1,6 +1,20 @@
 ---
 title: "Structural Welding & Fabrication"
-standardCode: "AS/NZS 1554.1 (where applicable)"
+tagline: "Weld maps, welder and procedure traceability, and NDT tracking for structural fabricators and shop QA teams."
+order: 4
+heroMetrics:
+  - { value: "Weld ID", label: "Records per joint" }
+  - { value: "WPS", label: "Procedure checked" }
+  - { value: "Welder", label: "Qualification gated" }
+  - { value: "NDT", label: "Request to result" }
+workflows:
+  - title: "Weld and welder traceability"
+    text: "Each weld records its WPS, welder and consumable batch, and the eligibility check blocks sign-off if the welder's qualification has lapsed."
+  - title: "NDT from request to result"
+    text: "Raise NDT requests against welds, receive results back against the same weld, and track repairs and re-inspection to close-out."
+relatedModules: ["inspections", "traceability", "eligibility", "issues"]
+sampleReport: "ncr-lifecycle"
+standardCode: "AS/NZS 1554.1 · AS/NZS 5131"
 keyRisks:
   - "Welding outside approved procedures or qualifications"
   - "Incomplete traceability of welds and materials"

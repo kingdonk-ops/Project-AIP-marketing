@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Check from '../components/Check.astro';
+import { cta } from '../lib/site';
+
+// Set PUBLIC_CONTACT_ENDPOINT at build time to the CRM or form handler URL (it receives a
+// standard POST). Until then the page explains how to reach us instead of showing a form
+// that goes nowhere.
+const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT as string | undefined;
+
+const offers = [
+  {
+    id: 'demo',
+    title: 'Book a 15-minute technical demo',
+    text: 'A focused walkthrough with someone who knows ITPs: hold and witness gates, instrument-linked readings, NCRs and the audit trail, on an example close to your work.',
+    points: ['Bring a current ITP or report and we will map it live', 'QA/QC, project and IT leads welcome', 'No slide deck']
+  },
+  {
+    id: 'sandbox',
+    title: 'Request a sandboxed workspace',
+    text: 'A private workspace loaded with your own ITP templates, so your team can run a real inspection end to end before committing.',
+    points: ['Your ITPs configured with onboarding support', 'Reviewer seats for client representatives', 'Start with one project']
+  }
+];
+const roles = ['QA/QC manager', 'Project director or manager', 'Superintendent', 'Inspector (coating, NDT, welding)', 'Asset integrity lead', 'IT or security', 'Other'];
+const orgTypes = ['EPCM', 'Tier-1 contractor', 'Asset owner or operator', 'Inspection service provider', 'Fabricator or coating contractor', 'Other'];
+---
+
+<BaseLayout title="Book a Demo | Project AIP" description="Book a 15-minute technical demo of Project AIP or request a sandboxed workspace with your own ITPs.">
+  <section class="mx-auto max-w-6xl px-6 pb-24 pt-20">
+    <div class="max-w-2xl">
+      <span class="text-sm font-semibold text-brand-600">Contact</span>
+      <h1 class="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">See Project AIP on your own inspection plans</h1>
+      <p class="mt-4 text-lg text-gray-600">Every customer starts with a sandbox and onboarding support. Prefer to audit the output first? <a href={cta.samples.href} class="font-semibold text-brand-700 hover:underline">Browse the sample reports</a>.</p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+      {offers.map((o) => (
+        <div id={o.id} class="scroll-mt-24 rounded-2xl border border-gray-200 p-8">
+          <h2 class="text-xl font-semibold">{o.title}</h2>
+          <p class="mt-3 text-sm leading-relaxed text-gray-600">{o.text}</p>
+          <ul class="mt-5 space-y-2.5">
+            {o.points.map((p) => <li class="flex items-start gap-2 text-sm text-gray-700"><Check />{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 rounded-3xl bg-sand p-8 sm:p-10">
+      {endpoint ? (
+        <form action={endpoint} method="post" class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <h2 class="text-2xl font-semibold tracking-tight sm:col-span-2">Tell us about your work</h2>
+          <fieldset class="sm:col-span-2">
+            <legend class="mb-2 text-sm font-medium">I'd like to</legend>
+            <div class="flex flex-wrap gap-4 text-sm">
+              <label class="flex items-center gap-2"><input type="radio" name="intent" value="demo" checked class="accent-brand-600" /> Book a technical demo</label>
+              <label class="flex items-center gap-2"><input type="radio" name="intent" value="sandbox" class="accent-brand-600" /> Request a sandboxed workspace</label>
+            </div>
+          </fieldset>
+          <label class="block text-sm font-medium">Name<input name="name" required autocomplete="name" class="mt-1.5 w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 font-normal focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" /></label>
+          <label class="block text-sm font-medium">Work email<input name="email" type="email" required autocomplete="email" class="mt-1.5 w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 font-normal focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" /></label>
+          <label class="block text-sm font-medium">Company<input name="company" required autocomplete="organization" class="mt-1.5 w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 font-normal focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" /></label>
+          <label class="block text-sm font-medium">Phone (optional)<input name="phone" type="tel" autocomplete="tel" class="mt-1.5 w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 font-normal focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" /></label>
+          <label class="block text-sm font-medium">Your role
+            <select name="role" class="mt-1.5 w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 font-normal focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100">
+              {roles.map((r) => <option>{r}</option>)}
+            </select>
+          </label>
+          <label class="block text-sm font-medium">Organisation type
+            <select name="organisation_type" class="mt-1.5 w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 font-normal focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100">
+              {orgTypes.map((r) => <option>{r}</option>)}
+            </select>
+          </label>
+          <label class="block text-sm font-medium sm:col-span-2">What do you inspect, and what slows you down today? (optional)
+            <textarea name="message" rows="4" class="mt-1.5 w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 font-normal focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"></textarea>
+          </label>
+          <div class="flex flex-wrap items-center gap-4 sm:col-span-2">
+            <button type="submit" class="rounded-full bg-brand-500 px-7 py-3.5 font-semibold text-white transition hover:bg-brand-600">Send request</button>
+            <p class="text-xs text-gray-500">We use these details only to respond to your request. See our <a href="/legal/privacy-policy/" class="underline">privacy policy</a>.</p>
+          </div>
+        </form>
+      ) : (
+        <div class="max-w-2xl">
+          <h2 class="text-2xl font-semibold tracking-tight">Enquiry form coming soon</h2>
+          <p class="mt-3 text-gray-600">Our booking form opens shortly, and contact details will be published here before launch. In the meantime, the sample reports show the deliverables Project AIP produces.</p>
+          <a href={cta.samples.href} class="mt-6 inline-block rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-800">{cta.samples.label}</a>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

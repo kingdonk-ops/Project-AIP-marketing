@@ -1,0 +1,11 @@
+---
+import CoatingDaily from './CoatingDaily.astro';
+import Ncr from './Ncr.astro';
+import ItpLog from './ItpLog.astro';
+
+interface Props { kind: 'coating-daily' | 'ncr' | 'itp-log' }
+const { kind } = Astro.props;
+---
+{kind === 'coating-daily' && <CoatingDaily />}
+{kind === 'ncr' && <Ncr />}
+{kind === 'itp-log' && <ItpLog />}
