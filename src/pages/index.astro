@@ -97,7 +97,7 @@ const stateClass = {
     </div>
     <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
       {modules.map((m) => (
-        <a href={`/modules/${m.slug}/`} class="group flex flex-col rounded-2xl border border-gray-200 p-7 transition hover:border-brand-500 hover:shadow-lg">
+        <a href={`/modules/${m.id}/`} class="group flex flex-col rounded-2xl border border-gray-200 p-7 transition hover:border-brand-500 hover:shadow-lg">
           <div class="text-xs font-semibold uppercase tracking-wide text-brand-600">{m.data.category}</div>
           <h3 class="mt-3 text-lg font-semibold leading-snug">{m.data.title}</h3>
           <p class="mt-2 text-sm leading-relaxed text-gray-600">{m.data.tagline}</p>
@@ -123,7 +123,7 @@ const stateClass = {
       </div>
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         {industries.map((ind) => (
-          <a href={`/industries/${ind.slug}/`} class="block rounded-2xl bg-white p-8 transition hover:shadow-lg">
+          <a href={`/industries/${ind.id}/`} class="block rounded-2xl bg-white p-8 transition hover:shadow-lg">
             <div class="mb-4 inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">{ind.data.standardCode}</div>
             <h3 class="mb-4 text-xl font-semibold">{ind.data.title}</h3>
             <div class="flex flex-wrap gap-2">
@@ -145,7 +145,7 @@ const stateClass = {
       </div>
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         {whitepapers.map((wp) => (
-          <a href={`/whitepaper/${wp.slug}/`} class="block rounded-2xl border border-gray-200 p-8 transition hover:border-brand-500 hover:shadow-lg">
+          <a href={`/whitepaper/${wp.id}/`} class="block rounded-2xl border border-gray-200 p-8 transition hover:border-brand-500 hover:shadow-lg">
             <h3 class="text-lg font-semibold">{wp.data.title}</h3>
             <p class="mt-2 text-sm leading-relaxed text-gray-600">{wp.data.abstract}</p>
           </a>

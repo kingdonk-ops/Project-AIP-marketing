@@ -32,7 +32,7 @@ const groups = [
         <h2 class="mb-6 text-xl font-semibold">{g.name}</h2>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {g.items.map((m) => (
-            <a href={`/modules/${m.slug}/`} class="group flex flex-col rounded-2xl border border-gray-200 p-5 transition hover:border-brand-500 hover:shadow-md">
+            <a href={`/modules/${m.id}/`} class="group flex flex-col rounded-2xl border border-gray-200 p-5 transition hover:border-brand-500 hover:shadow-md">
               <div class="flex items-start justify-between gap-3">
                 <h3 class="font-semibold leading-snug group-hover:text-brand-700">{m.data.title}</h3>
                 <span class={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusClass[m.data.status]}`}>{statusLabel[m.data.status]}</span>
