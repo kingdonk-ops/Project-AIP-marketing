@@ -1,0 +1,16 @@
+# Project AIP
+
+> Project AIP is an industrial asset inspection and QA/QC workflow platform for sectors such as oil & gas, mining, protective coatings & NDT, and structural welding.
+
+**This website is in pre-launch and is not yet ready for public release.**
+
+While the site is in pre-launch, please do not crawl, index, cache, or use its
+content for AI training or retrieval. Content and claims are still being
+reviewed and may change before launch. See `/robots.txt` for the current
+crawler policy.
+
+This notice will be replaced with a full content map when the site goes live.
+
+## Contact
+
+- Enquiries: https://project-aip.io/contact/
