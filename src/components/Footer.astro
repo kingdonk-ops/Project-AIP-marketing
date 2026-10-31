@@ -2,7 +2,15 @@
 import StatusPill from './StatusPill.astro';
 ---
 <footer class="bg-ink py-14 text-sm text-gray-400 print:hidden">
-  <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-6 md:grid-cols-5">
+  <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-6 md:grid-cols-6">
+    <div>
+      <h2 class="mb-4 font-semibold text-white"><a href="/products/" class="hover:text-white">Products</a></h2>
+      <ul class="space-y-2.5">
+        <li><a href="/products/" class="hover:text-white">Overview</a></li>
+        <li><a href="/features/offline-field-app/" class="hover:text-white">SiteSync — Tablet app</a></li>
+        <li><a href="/products/#project-aip" class="hover:text-white">Project AIP — Web app</a></li>
+      </ul>
+    </div>
     <div>
       <h2 class="mb-4 font-semibold text-white">Features</h2>
       <ul class="space-y-2.5">
