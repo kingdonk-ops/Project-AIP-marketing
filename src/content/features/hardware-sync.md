@@ -4,7 +4,7 @@ badge: "Instrument traceability"
 headline: "Every reading tied to the gauge that took it"
 summary: "Readings carry the instrument serial and its calibration status, and an out-of-calibration gauge can't be used. Direct Bluetooth capture from DFT and profile gauges is on the roadmap to remove double entry altogether."
 targetStandard: "ISO 19840 · SSPC-PA 2 · ISO 8503 measurement records"
-order: 3
+order: 5
 heroMetrics:
   - { value: "Serial", label: "Recorded with each reading" }
   - { value: "Blocked", label: "Out-of-calibration gauges" }
