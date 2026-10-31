@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Check from '../components/Check.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { cta } from '../lib/site';
+
+const products = [
+  {
+    id: 'sitesync',
+    eyebrow: 'Tablet app',
+    name: 'SiteSync',
+    tagline: 'Inspect, photograph and sign off with no signal — then sync safely when you are back in coverage.',
+    points: [
+      'Download assigned assets, templates and drawings before you drive out',
+      'Capture inspections, photos, measurements and defects fully offline',
+      'A visible sync queue that never silently overwrites a reading',
+      'Encrypted on-device storage with remote wipe for lost devices'
+    ],
+    href: '/features/offline-field-app/',
+    linkLabel: 'Explore the Offline Field App'
+  },
+  {
+    id: 'project-aip',
+    eyebrow: 'Web app',
+    name: 'Project AIP',
+    tagline: 'The office platform where ITPs are built, work is planned, and the client record is assembled and handed over.',
+    points: [
+      'Build and enforce Inspection and Test Plans with hold and witness points',
+      'Dashboards, KPI reporting and project-wide quality roll-up',
+      'Document control, approvals and tamper-evident sign-off records',
+      'Handover data books and client submissions assembled from live evidence'
+    ],
+    href: '/features/',
+    linkLabel: 'See all features'
+  }
+];
+---
+
+<BaseLayout
+  title="Products | Project AIP"
+  description="Two apps, one QA/QC record: SiteSync, the offline-first tablet app for the field, and Project AIP, the web platform for the office."
+>
+  <section class="mx-auto max-w-6xl px-6 pb-16 pt-20">
+    <div class="max-w-2xl">
+      <span class="text-sm font-semibold text-brand-600">Products</span>
+      <h1 class="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">Two apps, one QA/QC record</h1>
+      <p class="mt-4 text-lg text-gray-600">
+        The field and the office work from the same data. <strong class="font-semibold text-ink">SiteSync</strong> is the tablet
+        app your crews run on site, offline. <strong class="font-semibold text-ink">Project AIP</strong> is the web platform where
+        that work is planned, reviewed and handed over to the client.
+      </p>
+    </div>
+
+    <div class="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-2">
+      {products.map((p) => (
+        <div id={p.id} class="flex scroll-mt-24 flex-col rounded-3xl border border-gray-200 p-8 sm:p-10">
+          <div class="flex min-h-[4rem] items-center">
+            {p.id === 'sitesync' ? (
+              <img src="/brand/sitesync-logo.jpg" alt="AIP SiteSync" class="h-14 w-auto sm:h-16" width="2576" height="1438" loading="eager" />
+            ) : (
+              <div class="flex items-center gap-3">
+                <span class="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-500 text-2xl font-bold text-white">A</span>
+                <span class="text-3xl font-semibold tracking-tight">project<span class="text-brand-600">aip</span></span>
+              </div>
+            )}
+          </div>
+
+          <div class="mt-6">
+            <span class="text-xs font-semibold uppercase tracking-wide text-brand-600">{p.eyebrow}</span>
+            <h2 class="mt-2 text-2xl font-semibold tracking-tight">{p.name}</h2>
+            <p class="mt-3 leading-relaxed text-gray-600">{p.tagline}</p>
+          </div>
+
+          <ul class="mt-6 space-y-3 rounded-2xl bg-sand p-6">
+            {p.points.map((pt) => (
+              <li class="flex items-start gap-2 text-sm text-gray-700"><Check />{pt}</li>
+            ))}
+          </ul>
+
+          <a href={p.href} class="mt-auto pt-8 text-sm font-semibold text-brand-700 hover:text-brand-600">{p.linkLabel} →</a>
+        </div>
+      ))}
+    </div>
+
+    <p class="mt-10 max-w-3xl text-sm leading-relaxed text-gray-500">
+      SiteSync and Project AIP are part of the same platform: an inspection captured on SiteSync in the field becomes a
+      provisional record in Project AIP, and is reconciled, reviewed and published without anyone retyping it.
+    </p>
+  </section>
+
+  <div class="pt-8"><CtaBand title="See both apps on your own ITPs" /></div>
+</BaseLayout>
