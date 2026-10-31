@@ -3,6 +3,8 @@ title: "Offline Field App & Sync"
 badge: "Works with no signal"
 headline: "The whole inspection runs offline, then syncs without losing a reading"
 summary: "Crews download their assets, templates and drawings before they drive out, then capture inspections, photos, measurements and defects all shift with no coverage. Records sit in a visible queue and are designed never to be overwritten or lost, and when two people change the same field the app shows a merge screen instead of silently picking a winner."
+brandLogo: "/brand/sitesync-logo.jpg"
+brandLogoAlt: "AIP SiteSync"
 order: 3
 heroMetrics:
   - { value: "Offline", label: "Full capture, no signal" }

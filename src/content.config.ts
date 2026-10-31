@@ -40,6 +40,9 @@ const featuresCollection = defineCollection({
     title: z.string(), badge: z.string(), headline: z.string(), summary: z.string(),
     // Standards the workflow is built around, e.g. "ISO 9001 / AS/NZS 2312.1".
     targetStandard: z.string().optional(),
+    // Optional product brand lock-up shown in the feature hero, e.g. the SiteSync tablet-app logo.
+    brandLogo: z.string().optional(),
+    brandLogoAlt: z.string().optional(),
     order: z.number().default(0),
     heroMetrics: z.array(metric).default([]),
     // Each pillar carries its own delivery status so roadmap items are never presented as shipped.
