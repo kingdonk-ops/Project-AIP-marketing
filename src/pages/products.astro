@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Check from '../components/Check.astro';
 import CtaBand from '../components/CtaBand.astro';
+import Logo from '../components/Logo.astro';
 import { cta } from '../lib/site';
 
 const products = [
@@ -55,14 +56,7 @@ const products = [
       {products.map((p) => (
         <div id={p.id} class="flex scroll-mt-24 flex-col rounded-3xl border border-gray-200 p-8 sm:p-10">
           <div class="flex min-h-[4rem] items-center">
-            {p.id === 'sitesync' ? (
-              <img src="/brand/sitesync-logo.jpg" alt="AIP SiteSync" class="h-16 w-auto sm:h-20" width="2107" height="512" loading="eager" />
-            ) : (
-              <div class="flex items-center gap-3">
-                <span class="flex h-14 items-center justify-center rounded-xl bg-brand-500 px-3 text-2xl font-bold tracking-tight text-white">AIP</span>
-                <span class="text-3xl font-semibold tracking-tight">project<span class="text-brand-600">aip</span></span>
-              </div>
-            )}
+            <Logo product={p.id === 'sitesync' ? 'sitesync' : 'projectaip'} size={56} />
           </div>
 
           <div class="mt-6">

@@ -1,0 +1,34 @@
+---
+// Master brand lockups: the green "AIP" app mark + a typed wordmark.
+// `projectaip` → project<AIP>, `sitesync` → Site<Sync>. Proportions follow the master brand
+// artboard (80px mark, 52px wordmark, 18px gap), so both products render at the same size.
+interface Props {
+  product?: 'projectaip' | 'sitesync';
+  size?: number; // mark height in px
+  tone?: 'light' | 'dark'; // background the logo sits on
+  showWordmark?: boolean;
+  class?: string;
+}
+
+const { product = 'projectaip', size = 36, tone = 'light', showWordmark = true, class: className } = Astro.props;
+const words = { projectaip: ['project', 'AIP'], sitesync: ['Site', 'Sync'] }[product];
+const k = size / 80;
+const green = '#6AB23E';
+---
+<span
+  class:list={['inline-flex items-center', className]}
+  style={`gap:${18 * k}px;font-family:'Plus Jakarta Sans','Segoe UI',Arial,sans-serif;font-weight:800`}
+  role={showWordmark ? 'img' : undefined}
+  aria-label={showWordmark ? words.join('') : undefined}
+>
+  <span
+    class="inline-flex shrink-0 items-center justify-center text-white"
+    style={`width:${size}px;height:${size}px;border-radius:${16 * k}px;background:${green};font-size:${28 * k}px;letter-spacing:-0.02em;line-height:1`}
+    aria-hidden="true"
+  >AIP</span>
+  {showWordmark && (
+    <span aria-hidden="true" style={`font-size:${52 * k}px;letter-spacing:-0.035em;line-height:1;color:${tone === 'dark' ? '#FFFFFF' : '#141414'}`}>
+      {words[0]}<span style={`color:${green}`}>{words[1]}</span>
+    </span>
+  )}
+</span>
